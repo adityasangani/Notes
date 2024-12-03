@@ -30,3 +30,9 @@ DevOps bridges the gap between the Dev side and the Ops side of the company.
 
 ![image](https://github.com/user-attachments/assets/9cff83a3-b8b8-4e14-8b2b-b61b35aaba4b)
 
+**Disadvantages of Centralized Version Control System**
+- Not locally available. You will always have to connect to a network to take any action.
+- If somehow the server crashes, the entire data will be lost.
+
+ In Distributed Version Control System, every contributer has a local copy/clone of the main repository. https://www.youtube.com/watch?v=hQcFE0RD0cQ 19:33 
+
