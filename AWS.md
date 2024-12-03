@@ -77,3 +77,4 @@ So, we encapsulate proxy and backend servers into a private network. So, the AWS
 - Node.js can act as a web server. You can build a reverse light-weight proxy and can do load balancing with built-in cluster module.
   ![image](https://github.com/user-attachments/assets/f04e856a-38e1-4bab-9fd2-ee53804c6efc)
  
+## Shared Responsibility Model
