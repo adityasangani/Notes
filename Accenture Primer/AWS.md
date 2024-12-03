@@ -30,3 +30,41 @@
 - Key point: EC2 is for computation — it’s where you run your software and services, process data, or host websites and apps that need to "do work."
 - There are various family types in an instance. t2 is the general purpose instance.
 - Key pair(login): to connect to your instance. If you forget it, you won't be able to connect to your server.
+
+## AWS VPC (Virtual Private Cloud)
+- It is like a data center.
+![image](https://github.com/user-attachments/assets/0896a408-7805-48d0-9093-79e3e14c8044)
+- Inside this VPC everything can be created (like EC2, Kubernetes, etc.)
+- Private subnet's resources won't be accessible to the public, in constrast to the public subnet.
+- Internet gateway is the gateway to accessing the internet.
+- We must create an internet gateway in our VPC so that our subnet can communicate with the internet.
+- Route table will be used to navigate through the internet gateway and the public and private subnets.
+
+In the AWS console, we must do the following inside the VPC once it is created:
+- create internet gateway
+- create public and private subnets
+- create public and private route tables
+To give the public route table access to the internet, go inside it, put destination as 0.0.0.0/0 (0.0.0.0 means 'This network') and target as Internet Gateway.
+Next, we must associate the route table to the subnets. For that, in your route table go to 'Subnet associations' >  'Edit subnet associations' > select your subnet.
+Don't associate private subnet to the internet.
+
+## Load Balancing
+- We might have N servers, with servers getting requests which are supposed to be processed. These requests can also be called 'load'. The load balancer distributes these loads among the N servers.
+
+## Proxy vs Reverse Proxy vs Load Balancer
+1. Forward Proxy
+   - Sits between clients and the public internet.
+   - Forward Proxy = Client-Facing: It primarily serves the client by forwarding requests to a server.
+2. Reverse Proxy
+   - Proxy on the receiving end.
+   - Manages the incoming requests and distributes them to the right servers.
+   - Hence, reverse proxy sits on the server side.
+   - Functionalities of a Reverse Proxy:
+       - **Load Balancing**: Distributing incoming traffic across multiple backend servers to balance the load.
+       - Acting as a shield to protect the servers.
+         So, the reverse proxies will scan the requests, ensure SSL encryption is enabled (so the traffic is encrypted), and will check for any security threats.
+       - Caching content to reduce load on backend servers.
+       - Logging functionality for troubleshooting purposes.
+  A popular reverse proxy is NGINX.
+So basically, Load balancing is just one of the many functionalities of a reverse proxy.
+![image](https://github.com/user-attachments/assets/3377c1f1-27ae-4ce0-ae23-e2d067fbbe2c)
