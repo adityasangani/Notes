@@ -68,3 +68,12 @@ Don't associate private subnet to the internet.
   A popular reverse proxy is NGINX.
 So basically, Load balancing is just one of the many functionalities of a reverse proxy.
 ![image](https://github.com/user-attachments/assets/3377c1f1-27ae-4ce0-ae23-e2d067fbbe2c)
+So, we encapsulate proxy and backend servers into a private network. So, the AWS Load Balancer does load balancing to the reverse proxy.
+**So why do we need to load balance twice?**
+- Reverse proxy has more intelligent fine-grained load balancing which enables us to have more intelligent routing possible.
+- So while Cloud load balancer distribute traffic based on simple algorithms, we can use more advanced balancing in reverse proxy.
+
+### Bonus
+- Node.js can act as a web server. You can build a reverse light-weight proxy and can do load balancing with built-in cluster module.
+  ![image](https://github.com/user-attachments/assets/f04e856a-38e1-4bab-9fd2-ee53804c6efc)
+ 
