@@ -59,5 +59,23 @@ DevOps bridges the gap between the Dev side and the Ops side of the company.
 - To link the remote repo to the local repo, we will do: git remote add origin "<url>"
 - Now we can easily pull whatever we have in the remote repo into the local repo. We can do this by: git pull origin master
 
+## Continuous Integration (CI)
+- It is a development practice in which the developers are required to commit changes to the source code in a shared repo several times a day.
+- Every commit in the shared repo is then built so that problems are detected early.
+  ![image](https://github.com/user-attachments/assets/877a96e3-9dba-422a-b668-3cd51a94b99c)
+- The moment any developer commits changes to the source code, Jenkins server will pull that and will prepare a build.
+
+## Continuous Delivery (CD)
+- The next step of CI.
+- In a continuous/automatic fashion, we take the built application onto the test server for end user testing/UAT.
+
+   **Advantages of CI and CD**
+  - If there is a build failure, then we know which commit has caused that error.
+  - Similarly, if there is a testing failure, then we know which commit is the culprit.
+
+## Continuous Deployment 
+- In this, we take the build application that we have tested, and we deploy that onto the prod server for release.
+- Isn't good practice because we should have further checks before deploying it in the prod server.
+  
 
 
