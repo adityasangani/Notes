@@ -35,4 +35,29 @@ DevOps bridges the gap between the Dev side and the Ops side of the company.
 - If somehow the server crashes, the entire data will be lost.
 
  In Distributed Version Control System, every contributer has a local copy/clone of the main repository. https://www.youtube.com/watch?v=hQcFE0RD0cQ 19:33 
+- They can update their local repositories with new data from the central server by using the "pull" operation.
+- They can affect changes to the main repository using the "push" operation.
+
+**Advantages of Distributed Version Control System**
+- All operations except push and pull are extremely fast cus they are local.
+- So, you can use commit to make changes to your local repo, and then push it to the central server.
+- If central server crashes, it can easily be recovered from any of the local repos.
+- Local repos can share changes with each other before making the final change to the central server.
+
+ ![image](https://github.com/user-attachments/assets/a8f0b239-fdb9-45d0-9c9a-b391b560e2f8)
+
+ - Use git pull to bring changes from the remote central server to your local repo, and use git checkout/git merge to bring those changes to your working directory.
+
+**To use git**
+- First create a repo: mkdir hello-world-repo
+- cd into it.
+- git init (initialise this repo as an empty git repo)
+- make files, write code in them.
+- Now we need to transfer our code from working directory to local repo, we will use git add: git add <filename>
+- git status: will give us the files we need to commit to the local repo.
+- git commit -m "First commit"
+- To link the remote repo to the local repo, we will do: git remote add origin "<url>"
+- Now we can easily pull whatever we have in the remote repo into the local repo. We can do this by: git pull origin master
+
+
 
