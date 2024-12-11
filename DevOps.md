@@ -77,5 +77,44 @@ DevOps bridges the gap between the Dev side and the Ops side of the company.
 - In this, we take the build application that we have tested, and we deploy that onto the prod server for release.
 - Isn't good practice because we should have further checks before deploying it in the prod server.
   
+## Agile
+### SCRUM
+- You iterate over the deployments and software development one at a time.
+- Iteration of plan, build, test, review.
+Consists of:
+- Product Owner: Manager. Guy with the ideas, sees whether deadline is met. Doesn't have to know the technicalities.
+- Scrum Master: Team leader. Right below the product owner. Runs the meetings and the tasks.
+- Team: developers, testers.
+**Product Backlogs**
+  - You have the application iterated over in smaller tasks. Break the application into different things, and each will have the plan, build, test, and review cycles.
+  - Product Owner and scrum master break the application into product backlogs. Now each of these backlogs will be referred to as User Stories.
+  - Scrum master prioritizes among them.
+  - With the priorities set, sprint backlogs are made.
+  Sprint Backlogs
+- Sprint Planning: Fancy name for meetings. Product owner will explain his end goal.
+- Daily Scrum: 15 min meetings where developers, testers, etc tell their progress, help each other.
+- Sprint Review: Occurs at the end of the user story/backlog. (After two weeks generally, sprint ends, and this meeting takes place)
 
+### Extreme Programming (XP)
+- Prior version of scrum. Hence very similar to scrum.
+  ![image](https://github.com/user-attachments/assets/415aa2e4-920c-4925-8587-f8f97b368e39)
 
+### Lean Programming
+- Principles:
+    - Eliminate waste
+    - Amplify learning
+    - Decide as late as possible
+    - Decide as fast as possible
+    - Empower the team
+    - Build integrity
+    - See the whole
+  - It is cross functional team. Every person in the team should make sure the task must be completed. And everyone should have some idea about other people's work.
+
+ ### Kanban
+ - No such thing as sprint.
+ - You have build queue, test queue, ship queue.
+ - Once one service at the top of the build queue is done, it moves to the test queue, and so on.
+
+### Crystal
+
+   
