@@ -24,3 +24,9 @@ st.close();
 con.close();
 ```
 
+![image](https://github.com/user-attachments/assets/575a28ff-0ffd-4175-99f8-50dc7076483c)
+
+If we want to insert a row into our table, 
+int count = st.executeUpdate(query); (executeUpdate will return the number of rows that were affected)
+
+
