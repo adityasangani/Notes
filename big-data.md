@@ -19,3 +19,5 @@ Big data is a problem, and Hadoop is the solution.
 - Data science, ML, AI (Analytics)
 - Automation / Scheduling
 
+If interviewer asks: "Which distribution of Hadoop have you worked in?" -> Don't say Apache. Say Cloudera, hartanox, etc.
+
