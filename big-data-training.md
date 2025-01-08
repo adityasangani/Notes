@@ -53,3 +53,8 @@ Used to update the column values in the table.
 ![image](https://github.com/user-attachments/assets/5d28a48d-0785-400f-b457-41d9cca3e7e3)
 ![image](https://github.com/user-attachments/assets/d88d7f05-33e5-46ca-b8a6-08cb3dbf8083)
 
+![image](https://github.com/user-attachments/assets/6ad06506-ebdb-4765-a64b-78e894acb964)
+
+LEFT JOIN and LEFT OUTER JOIN are the same in SQL.
+
+The term OUTER is optional in the case of LEFT JOIN. Both refer to the same type of join, which returns all rows from the left table and the matching rows from the right table. If there is no match, the result will contain NULL values for columns from the right table.
