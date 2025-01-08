@@ -37,3 +37,19 @@ Truncate : Doesn't remove the table structure. Once you do truncate, you cannot 
 Drop: Removes the entire table including the data structure. You cannot rollback.
 ![image](https://github.com/user-attachments/assets/c23368e6-7fe5-45e9-9f82-2128f662554f)
 
+### DML
+![image](https://github.com/user-attachments/assets/920e4c5e-1bf9-4a18-9c0c-96e4a28134c4)
+UPDATE: update EMPLOYEE set dept = 'Finance';
+Used to update the column values in the table.
+![image](https://github.com/user-attachments/assets/aca31035-409b-4f45-ac69-1102be3ea091)
+
+#### DELETE Statement
+![image](https://github.com/user-attachments/assets/5d0fbbe1-a6d5-436a-b343-675191e49510)
+
+![image](https://github.com/user-attachments/assets/570b4903-e235-4955-93e5-4433bac45db2)
+![image](https://github.com/user-attachments/assets/69ab6305-f64b-4e72-935a-abbf0b7697d4)
+![image](https://github.com/user-attachments/assets/20a851c8-0541-401f-9a5a-8202d1ee79b9)
+
+![image](https://github.com/user-attachments/assets/5d28a48d-0785-400f-b457-41d9cca3e7e3)
+![image](https://github.com/user-attachments/assets/d88d7f05-33e5-46ca-b8a6-08cb3dbf8083)
+
