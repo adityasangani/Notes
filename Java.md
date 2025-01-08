@@ -29,4 +29,14 @@ con.close();
 If we want to insert a row into our table, 
 int count = st.executeUpdate(query); (executeUpdate will return the number of rows that were affected)
 
-
+First start your MySQL database.
+Then, in Intellij,
+- String url = "jdbc:mysql://localhost:3306/new_practice"; here new_practice is the name of the database.
+- String username = "root";
+- String password = whatever the password is
+- Then in try catch block, create a connection: Connection con = DriverManager.getConnection(url, username, password);
+- Statement st = con.createStatement();
+- Now, we will execute this query. Upon executing, we will get it in tabular form which we will store in a datatype called ResultSet.
+- ResultSet rs = st.executeQuery("select * from student");
+- Now to print it, we will first bring the pointer to the first row, by doing rs.next();
+- Then, Integer id = rs.getInt("st_id");
