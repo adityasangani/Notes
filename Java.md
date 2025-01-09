@@ -55,3 +55,15 @@ We use Class.forName() to register drivers.
 ### Class.forName()
 Lets say we have a class and in it we have a static block. If we want to execute the static block without creating an object of that class, we can do so by loading the class using: Class.forName("<name of the class>");
 Class.forName("com.mysql.jdbc.Driver"); is the same as DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+
+### JSP & Servlets 
+Normally, a client requests something from the server which the server already has, and the server responds with that object. But sometimes, a client requests something from the server which is then built in runtime dynamically. For this, the server forwards this request to an intermediary called Helper Application (Web Container). In this web container we have servlets. The servlets are basically java files which can take in the request, process it and output an html file. 
+Examples of web containers are:
+- Apache Tomcat
+- GlassFish
+- IBM WebSphere
+
+Now how do we decide for which type of request which servlet it should be forwarded to? Well that information is written in a file called the Deployment Descriptor whose filename is web.xml file. In this web.xml file (which is basically a servlet mappping file), we mention url names; that for this type of url, use this servlet, and so on. 
+
+Servlet is a normal java class which extends http servlet.
+Now in the latest update, we don't have to use web.xml files. Instead we can use Annotations on our servlets.
