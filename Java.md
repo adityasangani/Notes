@@ -40,3 +40,18 @@ Then, in Intellij,
 - ResultSet rs = st.executeQuery("select * from student");
 - Now to print it, we will first bring the pointer to the first row, by doing rs.next();
 - Then, Integer id = rs.getInt("st_id");
+
+ResultSet and executeQuery works only for DQL. For DML, for example when we want to insert values, we must use executeUpdate which will return the number of rows affected (int type). 
+Then it becomes, String query = "insert into student values (" + userid + ", " + username + "')";
+A better way is to use PreparedStatements. Then: 
+- String query = "insert into student values (?,?)";
+- PreparedStatement st = con.prepareStatement(query);
+- st.setInt(1, userid); [for first question mark]
+- st.setString(2, username); [for second question mark]
+- int count = st.executeUpdate();
+
+We use Class.forName() to register drivers.
+
+### Class.forName()
+Lets say we have a class and in it we have a static block. If we want to execute the static block without creating an object of that class, we can do so by loading the class using: Class.forName("<name of the class>");
+Class.forName("com.mysql.jdbc.Driver"); is the same as DriverManager.registerDriver(new com.mysql.jdbc.Driver());
