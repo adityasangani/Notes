@@ -58,3 +58,59 @@ Used to update the column values in the table.
 LEFT JOIN and LEFT OUTER JOIN are the same in SQL.
 
 The term OUTER is optional in the case of LEFT JOIN. Both refer to the same type of join, which returns all rows from the left table and the matching rows from the right table. If there is no match, the result will contain NULL values for columns from the right table.
+
+## Data Warehousing Concepts
+![image](https://github.com/user-attachments/assets/3ffcaf3d-770c-4472-8292-d9ecd1130587)
+![image](https://github.com/user-attachments/assets/2f9c64a4-9383-4f26-9ba8-9a8c85f5a4f8)
+Extraction: Collecting all the data
+Transformation: Some business logic which converts unstructured data into structured data.  
+Loading: Saving the transformed data into the target data warehouse or database.
+
+There are different ways of storing the data.
+1. Subject Oriented
+![image](https://github.com/user-attachments/assets/428c5c3f-5eb2-40e9-84dc-b36f68ccf01c)
+2. Time Variant
+![image](https://github.com/user-attachments/assets/ce922e73-68dd-4edf-8713-d55ab765d2c2)
+Here, the data keeps on changing with time.
+3. Integrated
+![image](https://github.com/user-attachments/assets/a28ffedf-fc9c-4962-8fcc-605ae8a500ff)
+4. Non-Volatile
+The stored data is never removed. The history is retained.
+![image](https://github.com/user-attachments/assets/aea89fb9-3b4a-47c6-a5d0-92c6483e8e04)
+
+![image](https://github.com/user-attachments/assets/826c0b99-93cc-4fcd-9af8-6b3c9e8c0c52)
+![image](https://github.com/user-attachments/assets/d39494cd-db3c-4dfe-bc34-3ac24d6f19d2)
+
+### DW Schema
+![image](https://github.com/user-attachments/assets/7e808d35-a7b6-4044-bfb1-5bdade127d18)
+![image](https://github.com/user-attachments/assets/3c091d5d-8f11-406a-82d4-1566b057117a)
+![image](https://github.com/user-attachments/assets/817e4692-f883-413a-b3ae-3331a16b08aa)
+
+### DW Objects
+![image](https://github.com/user-attachments/assets/5b9e0644-0939-42b8-942d-dc50d2148c96)
+![image](https://github.com/user-attachments/assets/0624b41d-89f2-4b33-90f2-503302717f26)
+![image](https://github.com/user-attachments/assets/2aa25c88-fd8b-4a5e-b4f4-7a54002ce1cc)
+![image](https://github.com/user-attachments/assets/31f875f5-dce3-4f13-bd25-e2c18317c22c)
+![image](https://github.com/user-attachments/assets/102a90b6-14d1-44c2-a5de-e7904027cc89)
+![image](https://github.com/user-attachments/assets/95ed60ed-778d-4947-b313-947a4e7aa845)
+![image](https://github.com/user-attachments/assets/a171a993-9536-4e49-9850-03aa4c80dff8)
+![image](https://github.com/user-attachments/assets/7e0b1580-0e52-49c9-841c-04d3dd422a6d)
+![image](https://github.com/user-attachments/assets/d86a1a71-5fc7-4313-a1ea-e7c4f162db5a)
+
+### Extract
+![image](https://github.com/user-attachments/assets/d58189de-15d7-4753-a7e5-d0618f09e734)
+![image](https://github.com/user-attachments/assets/a401bad6-8c54-4b1c-ac5d-96a51ff9eff3)
+
+### Transform
+
+
+### Load
+![image](https://github.com/user-attachments/assets/0272b8c9-35a0-4668-a28e-489b0a765785)
+
+### ELT
+![image](https://github.com/user-attachments/assets/a8eac859-1970-4467-adb6-657fe1b6db2d)
+![image](https://github.com/user-attachments/assets/61fff549-582e-4ac9-92d4-36f5c62c316d)
+![image](https://github.com/user-attachments/assets/4b0d13ad-5e5d-4481-8519-b5861b779f15)
+
+### Big Data
+![image](https://github.com/user-attachments/assets/b18012e9-ca80-4626-86cf-9b0130ac69b2)
