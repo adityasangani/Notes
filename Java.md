@@ -67,3 +67,19 @@ Now how do we decide for which type of request which servlet it should be forwar
 
 Servlet is a normal java class which extends http servlet.
 Now in the latest update, we don't have to use web.xml files. Instead we can use Annotations on our servlets.
+
+Apache is the server, and Tomcat is the container. Containers are friends of webservers, and they try to do tasks which the web server cannot handle, like security, database management, life-cycle management.
+Servlets are discrete java classes that reside inside the container.
+![image](https://github.com/user-attachments/assets/12066e57-a7b5-41bb-9261-9957a18990c0)
+
+- All the classes and interface required to work with Servlet API are in javax.servlet package and javax.servlet.http package.
+- If you want to make a Servlet class; your class needs to implement Servlet interface DIRECTLY or INDIRECTLY.
+- Servlet can be made in 2 ways: extend javax.servlet.GenericServlet, and extend javax.servlet.http.HttpServlet.
+- javax.servlet.Servlet contains 3 basic lifecycle methods: init(), service(), destroy().
+![image](https://github.com/user-attachments/assets/ac5ce5f2-5b58-44e5-8043-5b5c4e0156dc)
+
+For the "GET" method, the servlet takes the values from the url. This isn't secure because what if we have some functionality using usernames and passwords. Hence to make it secure, we have to use "POST". 
+When we use POST, it will store your data in cookies, and then use those values to perform the functionalities.
+- GET is more faster, but POST is more secure.
+
+- If we extend 
