@@ -82,4 +82,37 @@ For the "GET" method, the servlet takes the values from the url. This isn't secu
 When we use POST, it will store your data in cookies, and then use those values to perform the functionalities.
 - GET is more faster, but POST is more secure.
 
-- If we extend 
+- If we extend HttpServlet, we have 2 types of service: doPost and doGet. If in client we are doing get, use doGet. Similarly do the same for doPost.
+- If you want to give freedom to client to do get and post both, we can either write the same function twice, once with doGet, and once with doPost; or create another method, write the logic in that, and then call the methods in the doGet and doPost methods.
+![image](https://github.com/user-attachments/assets/790f45d0-3acb-4e47-84de-15494256f676)
+![image](https://github.com/user-attachments/assets/82e833f2-3517-4941-baa9-e514aa8d8fb2)
+![image](https://github.com/user-attachments/assets/caf393b7-fab1-4097-8941-a02f065a35ca)
+![image](https://github.com/user-attachments/assets/709e6d5e-fb8d-4a3f-bc04-27184618cc96)
+### Servlet Hierarchy
+![image](https://github.com/user-attachments/assets/c353272d-9d74-437f-a155-9c6bb905a505)
+
+### Counting Website Visits
+![image](https://github.com/user-attachments/assets/13f721a7-6427-473e-8ea8-5f25bb2e7744)
+Here, since the servlet is already inside the container, it will not call the init function again, only once. After that it will always call the service method only.
+
+### Calling a Servlet from a Servlet
+First create the two servlets, FirstServlet and SecondServlet. Now to call SecondServlet in FirstServlet, use the interface RequestDispatcher, which has two methods: forward and include.
+RequestDispatcher rd = request.getRequestDispatcher("SecondServlet");
+rd.forward(req, res); [Here, we are sending the same req object of FirstServlet to SecondServlet]
+
+Now, we can also instead send the client to the second servlet directly. "Tum unse direct hi pooch lo jo tum mujhe pooch rahe the. In the previous one, client mujhe pooch raha tha, maine wo cheez second servlet ko poochi, usne mujhe jawaab diya, aur maine tumhe wo jawab bataya."
+This is called "redirect":
+res.sendRedirect("SecondServlet");
+However, here in redirect, the SecondServlet won't have the same req object as the FirstServlet since we aren't passing the req object to SecondServlet. So in order to tackle this, we can use HttpSession.
+
+### How to use HttpSession Session Management
+- First get the data from the req object: 
+String str = req.getParameter("t1");
+- Create a new object of HttpSession interface like this: 
+HttpSession session = request.getSession();
+- Set this data in the session:
+session.setAttribute("t1", str); [t1 here is just a label, and str is the data which is going to be mapped to the t1 key]
+
+Now in the SecondServlet we must fetch this data:
+- HttpSession session = req.getSession();
+- String str = session.getAttribute("t1").toString(); [getAttribute will give us object. We must convert that into String]
