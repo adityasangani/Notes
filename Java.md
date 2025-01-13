@@ -154,3 +154,10 @@ In web.xml:
 ![image](https://github.com/user-attachments/assets/d9cec9fa-c6bc-41c8-8742-b91c65b02334)
 And now in FirstServlet:
 ![image](https://github.com/user-attachments/assets/e678eb73-d489-457b-89c3-fc3b00fd6977)
+
+### File Upload in Java Servlet
+First, set up your project, and download 
+Lets say we have a form in which we take in multiple files:
+![image](https://github.com/user-attachments/assets/7ef4a1a6-6581-450f-b3a2-e655780b549b)
+Now since the client is sending multiple files, lets say we have a servlet called FileUpload which which has a request object which has those multiple files:
+
