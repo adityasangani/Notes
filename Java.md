@@ -156,8 +156,10 @@ And now in FirstServlet:
 ![image](https://github.com/user-attachments/assets/e678eb73-d489-457b-89c3-fc3b00fd6977)
 
 ### File Upload in Java Servlet
-First, set up your project, and download 
+First, set up your project, and download Apache Commons File Upload, and put that dependency in your pom.xml file. We will use this when we want to retrieve File from request object in servlet.
 Lets say we have a form in which we take in multiple files:
 ![image](https://github.com/user-attachments/assets/7ef4a1a6-6581-450f-b3a2-e655780b549b)
 Now since the client is sending multiple files, lets say we have a servlet called FileUpload which which has a request object which has those multiple files:
+First create an object of ServletFileUpload:
+![image](https://github.com/user-attachments/assets/8e13cf28-17d5-4f67-8527-00cf92a6fb76)
 
