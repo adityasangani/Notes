@@ -116,3 +116,41 @@ session.setAttribute("t1", str); [t1 here is just a label, and str is the data w
 Now in the SecondServlet we must fetch this data:
 - HttpSession session = req.getSession();
 - String str = session.getAttribute("t1").toString(); [getAttribute will give us object. We must convert that into String]
+
+### Another Alternative is Cookie for Session Management
+![image](https://github.com/user-attachments/assets/0467e757-184a-440c-b4ff-573cfcde5670)
+Server gives client a cookie to keep for future reference. 
+Now when the client is asked to take out all of its cookies and show, the client will show all the cookies to the server. 
+So now to get all the cookies from the client (in the SecondServlet): 
+- Cookie cookies[] = request.getCookies();
+- Now, we will traverse through all the cookies until we find the Cookie with the tag "t1".
+
+### URL Rewriting for Session Management
+Now lets say we want to get the String str of FirstServlet into the SecondServlet, but this time we want to get it from the URL.
+So now, in FirstServlet:
+![image](https://github.com/user-attachments/assets/e22e8c76-3968-4587-bc2e-40f7c2e328eb)
+And in SecondServlet:
+![image](https://github.com/user-attachments/assets/0d984f43-1712-4cba-8f43-2bc73e813a6f)
+
+### ServletConfig and ServletContext
+![image](https://github.com/user-attachments/assets/1ba6faf7-888a-437c-a2bd-3bebeb69fe6f)
+Use Cases
+ServletConfig:
+Used to initialize servlet-specific configurations like database connections or API keys.
+Example: A servlet that connects to a unique database.
+
+ServletContext:
+Used for application-wide configurations, like setting global attributes or reading shared files.
+Example: A shared counter for tracking the number of active users in the application.
+
+Let's use ServletContext first:
+In web.xml file:
+![image](https://github.com/user-attachments/assets/fa6e3af4-11b0-4bb9-9ff0-d43b558b6bbd)
+And now in FirstServlet:
+![image](https://github.com/user-attachments/assets/324b1e15-addd-4b98-bc7a-9711871667ed)
+
+Let's now use ServletConfig:
+In web.xml:
+![image](https://github.com/user-attachments/assets/d9cec9fa-c6bc-41c8-8742-b91c65b02334)
+And now in FirstServlet:
+![image](https://github.com/user-attachments/assets/e678eb73-d489-457b-89c3-fc3b00fd6977)
