@@ -168,6 +168,7 @@ JSP is like React and EJS. It embeds Servlet logic into HTML.
 - Thus it makes it easier for developers to write JSP code directly, instead of creating an entire separate Servlet.
 - The JSP file is internally converted into a Servlet file later on anyways btw.
 - In servlets we always give a class name and then extend it right? So here, in JSP lets say the name of the file is demo.jsp. When the JSP file is converted into Servlet, the class' name will be demojsp automatically.
+- JSP automatically provides several implicit objects, including request, response, session, out, etc.
   ![image](https://github.com/user-attachments/assets/8d473647-64f4-4900-9254-f2df6a8a53ba)
 In JSP, the "<% ..... %>" tag is called "Scriptlet". Whatever logic we write inside the Scriptlet will be included in the service method of the automatically created Servlet; so how do we somehow initialize or declare something outside of the service method BUT inside the Servlet, in JSP? ->
 - To do this, we use "<%! .... %>" which is called the "Declaration" tag.
@@ -183,3 +184,70 @@ If you want to print out something, we can do so using ->
 #### When to use JSP and when to use Servlet
 If your intention is to show data on a page, or create a page, JSP is better. 
 If your intention is to process the data, then Servlet is better.
+
+### JSP Directive
+1. @page : for importing
+2. @include : if you want to use some other jsp file in your current jsp file
+3. @taglib : if you want to use extra tags (like spring frameworks' tags)
+
+1. @page
+   <%@ page attribute="value" attribute="value" ... %>
+   ![image](https://github.com/user-attachments/assets/78338ae5-7a96-4bcc-92a9-8eff01bd8ec3)
+2. @inclue
+   <%@ include file="filename" %>
+   <%@ include file="header.jsp" %>
+3. @taglib
+   <%@ taglib uri="uri" prefix="fx" %>
+   Now when you want to use that tag: <fx:aditya>
+
+### MVC using Servlet and JSP
+MVC = Model View Controller
+Problems with JSP: 
+1. Runs slower in comparison to servlets, because it first gets converted into a servlet.
+2. Don't write actual business code inside jsp.
+
+Whenever a client sends a request, it will go to a controller. Its the controller's responsiblity to call the view, and this view will go to the client. So when the controller calls the view, it will also send data along with it. This data will be sent in the form of an object (called model), and the view will then fit this data inside it and then send itself to the client. 
+Here, the controller is the Servlet. 
+The view is the JSP. 
+The model is POJO (Plain Old Java Object).
+![image](https://github.com/user-attachments/assets/056b1511-6b16-44a0-9ffb-82c27b58808c)
+
+#### N-Tier Architecture (Optional)
+![image](https://github.com/user-attachments/assets/36582487-44d8-4e1c-983a-cca0b8bd84f2)
+Basically in this, we use the concept of modularity. Instead of writing the database connection (jdbc logic) inside the servlet, the servlet instead calls another class called service, and the service calls DAO (Data Access Object) which then calls the database. 
+
+### Login using Servlet and JSP
+In web servers, login functionality is hard because it follows HTTP protocol, which is stateless. So if you login once, it won't remember that you have logged in, and so we have to use some session management, or you can use cookies also. 
+Lets say we have Login page, Welcome page, Videos page, and About us page. 
+Upon clicking Login button, we can invoke a Verify.java servlet in which we would set the username attribute in the session, and redirect to the Welcome page (using sendRedirect()). 
+Then in Welcome page we will perform a check; whether there is a username key-value pair in session. We will use "if" statement for this: if(session.getAttribute("username")==null){
+then redirect to login page
+} 
+Upon clicking the logout button, a servlet should be invoked Logout.java in which we remove the attribute: session.removeAttribute("username"). 
+Do these above steps for every secure page. 
+
+We can do this:  <h1> Welcome ${username} </h1>
+here, ${} is called JSTL, and we can pass in the variables from session. 
+
+### How to Prevent Back button after Logout
+In your welcome.jsp, do the following:
+<% 
+  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+  ...
+%>
+This above code works for HTTP 1.1
+![image](https://github.com/user-attachments/assets/179c0ad5-a382-4317-acad-0a66c1277488)
+
+### Incorporating JDBC for fetching username and password from MySQL Database for Validation
+- First, get mysql-connector from maven and put that dependency in pom.xml.
+- Second, open mysql database
+- Third, do JDBC connection in a new package which has class called LoginDao.java:
+![image](https://github.com/user-attachments/assets/3c875548-9efa-4503-9cff-785cc7289a0a)
+- Lastly, your Login.java should look like this:
+  ![image](https://github.com/user-attachments/assets/98da893c-f25b-4b45-8009-7a29fcdc32ab)
+
+### Servlet Filter
+Lets say we have a web container which has 3 servlets a, b and c. Now lets say we want to print logs for a and c, maintain security for b and c and so on. Then we would have to write extra repetitive code in them. 
+Instead we can use filters which would be code taken out from a, b and c.  
+![image](https://github.com/user-attachments/assets/05f0124a-f5e6-4aaf-81e6-b8ad95ca8c79)
+To create Servlet filter, we must create a class which extends ServletFilter.
