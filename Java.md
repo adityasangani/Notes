@@ -163,3 +163,23 @@ Now since the client is sending multiple files, lets say we have a servlet calle
 First create an object of ServletFileUpload:
 ![image](https://github.com/user-attachments/assets/8e13cf28-17d5-4f67-8527-00cf92a6fb76)
 
+### JSP and How it is translated into Servlets
+JSP is like React and EJS. It embeds Servlet logic into HTML. 
+- Thus it makes it easier for developers to write JSP code directly, instead of creating an entire separate Servlet.
+- The JSP file is internally converted into a Servlet file later on anyways btw.
+- In servlets we always give a class name and then extend it right? So here, in JSP lets say the name of the file is demo.jsp. When the JSP file is converted into Servlet, the class' name will be demojsp automatically.
+  ![image](https://github.com/user-attachments/assets/8d473647-64f4-4900-9254-f2df6a8a53ba)
+In JSP, the "<% ..... %>" tag is called "Scriptlet". Whatever logic we write inside the Scriptlet will be included in the service method of the automatically created Servlet; so how do we somehow initialize or declare something outside of the service method BUT inside the Servlet, in JSP? ->
+- To do this, we use "<%! .... %>" which is called the "Declaration" tag.
+
+If you want to import a package, in a traditional Servlet we just write import and then the package name. But how to do this in JSP? ->
+- We do this like this: <%@ page import="java.util.Date, java.sql.dfs" %> and this tag is called "Directive" tag.
+  ![image](https://github.com/user-attachments/assets/dafd1fba-4ca8-4195-a57a-9d540a8bb8ac)
+
+If you want to print out something, we can do so using -> 
+- We do this: <%= k %> Here variable k's value will be printed. This tag is called "Expression" tag. Whatever we write inside the <%= tag will be going inside the out.print() in the automatic converted Servlet.
+  ![image](https://github.com/user-attachments/assets/dfdb96f8-727e-4280-9083-85a1b8a3b99d)
+
+#### When to use JSP and when to use Servlet
+If your intention is to show data on a page, or create a page, JSP is better. 
+If your intention is to process the data, then Servlet is better.
