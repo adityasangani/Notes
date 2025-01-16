@@ -80,3 +80,67 @@ os.remove("demofile.txt")
   import os
   os.rmdir("myfolder")
 Note: You can only remove empty folders.
+
+### Multithreading
+- Doing multiple tasks at a time.
+- Thread is a lightweight process.
+```
+import threading
+import time
+import random
+import queue
+ 
+buffer = queue.Queue(maxsize=10)
+ 
+num_items = 20
+ 
+def producer():
+    for _ in range(num_items):  # for i in range(20):
+        item = random.randint(50, 100) # will create an integer number from 50 to 100
+        buffer.put(item)
+        print(f"The Produced Item is: {item}")
+        time.sleep(random.uniform(1, 2)) # floating numbers between 1 and 2. Thread will sleep for that many seconds
+ 
+    for _ in range(5):
+        buffer.put(None)
+ 
+    print("Producer has finished producing")
+ 
+def consumer():
+    while True:
+        item = buffer.get()
+        if item is None:
+            break
+        print(f"The Consumed Item is: {item}")
+        time.sleep(random.uniform(30, 60))
+ 
+# Creating the threads
+producer_thread = threading.Thread(target=producer)
+ 
+consumer_thread1 = threading.Thread(target=consumer)
+consumer_thread2 = threading.Thread(target=consumer)
+consumer_thread3 = threading.Thread(target=consumer)
+consumer_thread4 = threading.Thread(target=consumer)
+ 
+# Starting the threads
+producer_thread.start()
+ 
+consumer_thread1.start()
+consumer_thread2.start()
+consumer_thread3.start()
+consumer_thread4.start()
+ 
+# Waiting for the threads to finish
+producer_thread.join()
+ 
+consumer_thread1.join()
+consumer_thread2.join()
+consumer_thread3.join()
+consumer_thread4.join()
+ 
+print("All threads have finished Execution")
+    
+```
+
+
+
