@@ -192,4 +192,37 @@ from Student
 ![image](https://github.com/user-attachments/assets/8d9917dc-7833-4706-b7c8-7f0123fed151)
 ![image](https://github.com/user-attachments/assets/38d266f6-778b-4445-a527-29bd9a7481ff)
 
+### Hibernate Object States | Persistence Life Cycle
+For every object in java we atleast have 2 states, New and End state.
+Hibernate makes its own states. When we create an object, it becomes a transient state. Transient state means that whenever you destroy that object, you will lose its data. If you want to get that data back, you must persist it. If the object is in the Persistent state, then whatever we do with that object's values will be reflected in the database as well. 
+- The next state is Detached. Now lets say we want to perform some operation on the object but don't want that to be reflected in the database. Detached and Transient states are very similar.
+- If you want to remove data from database after the Persistent state, for that we have the Removed State.
+- If you want to get data from database without creating a new object: get(), find(). We will go directly to the Persistent state.
+  ![image](https://github.com/user-attachments/assets/6ab387a3-b44b-4d4d-8007-8ab9fd452894)
+- Laptop l = new Laptop(); [New state]
+- l.setLid(51); [Transient state. The moment we start setting values, it goes to the Transient state]
+  l.setBrand("Sony");
+  l.setPrice(700);
 
+session.save(l) [Persistent state]
+session.detach(l) [Detach state]
+
+### Difference between Get and Load in Hibernate
+- Every time you use get() you will hit the database. Using Get makes more sense if we are fetching data.  
+- However, load() will not hit the database. Load will give you the Proxy object (a blank object). Using Load makes sense when we are defining an object that depends on another object.
+
+### JPA (Java Persistence API)
+JPA is a specification for ORM tools to follow. 
+
+#### JPA Implementation
+Dependencies in pom.xml: hibernate, and mysql connector. 
+In order to implement JPA, we need to use find() function from an interface called EntityManager which comes from a class called EntityManagerFactory. 
+- In src/main create a folder called "resources" which has a folder called "META-INF". Inside this folder, create a file called "persistence.xml".
+  ![image](https://github.com/user-attachments/assets/a09a0db9-b17a-4934-aa2d-eb7c3f95b834)
+- Now in App.java:
+  ```
+     EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu");
+     EntityManager em = emf.createEntityManager();
+     Alien a = em.find(Alien.class, 4); //to fetch
+  //To save: em.persist(a);
+  ```
