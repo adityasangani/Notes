@@ -114,3 +114,33 @@ The stored data is never removed. The history is retained.
 
 ### Big Data
 ![image](https://github.com/user-attachments/assets/b18012e9-ca80-4626-86cf-9b0130ac69b2)
+
+## Different Uses of Databases
+Two common types of databases:
+### Online Transaction Processing (OLTP) Database
+Used for applications that handle immediate user transactions, such as entering data or retreiving data from a screen or report. Multiple users can access this database simultaneously without having problems of data contention or integrity. 
+
+### Online Analytical Processing (OLAP) Database
+Used for applications that handle massive data analysis for report generation and forecasting. 
+Data is entered into an OLAP massively from various systems in batch mode.
+Here, users are not looking for specific set of data but rather patterns or behaviour of data.
+
+### ACID Properties of a Database
+#### A = Atomicity
+- This property guarantees that an action is only executed on the database when all of its related actions are successfully executed.
+- Transaction: It is a set of interrelated activities in a database, where all must be completed for it to be successful.
+
+#### C = Consistency
+- This property guarantees that data residing inside a database is always consistent with the rules that have been set for the database.
+- If an action on the database is not following the rules, it won't be allowed. 
+
+#### I = Isolation
+- This property guarantees that while you're updating a piece of data, everyone else trying to access(i.e read) the same data will see the original version of the data, and will not be able to see changes in an intermediate state.
+- To implement isolation, the database can do locking.
+
+#### D = Durability
+- This property guarantees that once a user is notified of success in his action on the database, the completed action will persist. Even if the power supply of the building turns down, the database should be able to recover the updated data once the power returns.
+
+### Database System Components
+1. CPU
+2. Memory: It is the intermediate stage between 'data in the disk' and 'data being processed in the CPU'.
