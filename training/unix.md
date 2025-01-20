@@ -108,4 +108,6 @@ chmod go+rwx demo.txt //giving all three, read, write and execute permissions
 ```
 grep <enter word> demo.txt
 grep <enter word> demo.txt demo2.txt demo3.txt
+grep 'is here' demo.txt //to find string in a file
+grep LOLOLOL -i demo.txt //to search case insensitive
 ```
