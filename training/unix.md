@@ -111,3 +111,41 @@ grep <enter word> demo.txt demo2.txt demo3.txt
 grep 'is here' demo.txt //to find string in a file
 grep LOLOLOL -i demo.txt //to search case insensitive
 ```
+
+15. Sorting the lines of a text
+```
+sort demo.txt
+sort -n demo.txt //sorts based on numerical value order
+```
+
+16. To use multiple commands in a single command
+```
+ls | sort //lists files in alphabetical order
+```
+
+17. To remove consecutive duplicates
+```
+uniq fret.txt
+uniq -u fret.txt //removes all the consecutive duplicates
+```
+
+18. To find the word count
+```
+wc test.txt //gives lines, words, characters
+wc -w test.txt //gives only number of words
+wc -l test.txt //gives only number of lines
+wc -c test.txt //gives only number of characters
+```
+
+19. To count number of files in directory
+```
+ls -l | wc -l
+```
+
+20. To cut the words
+```
+cut -c 3-6 demo.txt //displays from 3rd to 6th character for each line
+cut -d " " -f 1,3 demo.txt //d here means delimiter. We put " " as delimiter here. It will give us the first and third word.-f since we are doing file based operations.
+```
+
+21. 
