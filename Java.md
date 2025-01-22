@@ -251,3 +251,6 @@ Lets say we have a web container which has 3 servlets a, b and c. Now lets say w
 Instead we can use filters which would be code taken out from a, b and c.  
 ![image](https://github.com/user-attachments/assets/05f0124a-f5e6-4aaf-81e6-b8ad95ca8c79)
 To create Servlet filter, we must create a class which extends ServletFilter.
+
+
+If we have initializer block, static block and constructor in a class, when we call an object, first the static block will be loaded into the jvm and called first, then object will be instantiated and so now the initializer block will be called, after which the constructor block will finally be called. 
