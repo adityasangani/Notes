@@ -266,6 +266,22 @@ static {
 }
 ```
 It is usually used to initialize static variables. 
+To make sure only one instance is created of a class:
+```
+public class School{
+	private static School school = new School();
+	private School(){ //the constructor is private. So now no one outside this class can create an object using this constructor
+				
+	}
+	public static School getInstance(){
+		return school;
+	}
+}
+```
+Now in another class when we want to create an instance of School, but we want to make sure only one instance can be created:
+```
+School instance = School.getInstance();
+```
 
 
 ## File Handling in Java
