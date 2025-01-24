@@ -252,5 +252,166 @@ Instead we can use filters which would be code taken out from a, b and c.
 ![image](https://github.com/user-attachments/assets/05f0124a-f5e6-4aaf-81e6-b8ad95ca8c79)
 To create Servlet filter, we must create a class which extends ServletFilter.
 
+## Extra Notes on Basic Java
+- If we have initializer block, static block and constructor in a class, when we call an object, first the static block will be loaded into the jvm and called first, then object will be instantiated and so now the initializer block will be called, after which the constructor block will finally be called. 
 
-If we have initializer block, static block and constructor in a class, when we call an object, first the static block will be loaded into the jvm and called first, then object will be instantiated and so now the initializer block will be called, after which the constructor block will finally be called. 
+### Static in Java
+- The main concept behind static is that it belongs to the class rather than instances of the class.
+- The static method can not use non-static data member or call non-static method directly.
+- "this" and "super" cannot be used in static context.
+- static block: executes when a class is loaded into the memory. Syntax:
+```
+static {
+  
+}
+```
+It is usually used to initialize static variables. 
+
+
+## File Handling in Java
+Stream is a series of data. If you want to store data in byte form, use Byte Stream. If you want to store data in character form, use Character Stream.
+#### Create a file
+createNewFile(). Returns boolean: true if it successfully creates a new file, and false if file already exists.
+#### Get File Information
+#### Write to a File
+FileWriter class and its write() method.
+#### Read from a File
+Create an instance of Scanner class, and use hasNextLine() method nextLine() method to get data.
+Then close(). 
+#### Delete a File
+
+```
+File f0 = new File("NewFile.txt"); //Creating an object of a file
+if(f0.createNewFile()){
+  sout("success");
+} else{
+  sout("File already exists");
+}
+if(f0.exists()){
+  sout(f0.getName()); //To get file name
+  sout(f0.getAbsolutePath()); //Getting path
+  sout(f0.length()); //Size of the file in bytes
+}
+//writing content into a file
+FileWriter fwrite = new FileWriter("NewFile.txt");
+fwrite.write("Lorem Ipsum");
+
+//closing the stream
+fwrite.close();
+
+//Create f1 to read data
+File f1 = new File("NewFile.txt");
+Scanner dataReader = new Scanner(f1);
+while(dataReader.hasNextLine()){
+  String fileData = dataReader.nextLine();
+}
+dataReader.close();
+
+//removing file
+File f0 = new File("NewFile.txt");
+if(f0.delete()){
+  sout("success");
+} else{
+  sout("error deleting the file");
+}
+```
+
+Ma'am's code:
+```
+import java.io.*;
+import java.util.*;
+
+public class FileDemo {
+	public static void main(String args[]){
+		try{  
+                       // Creating an object of a file  
+                       File f0 = new File("NewFile.txt");   
+                       
+		       if (f0.createNewFile()) {  
+                                  System.out.println("File " + f0.getName() + " is created successfully.");  
+                       } 
+		       else{  
+                                  System.out.println("File is already exist in the directory.");  
+                       }  
+                           
+			if (f0.exists()) {  
+            			// Getting file name  
+            			System.out.println("The name of the file is: " + f0.getName());  
+   
+            			// Getting path of the file   
+            			System.out.println("The absolute path of the file is: " + f0.getAbsolutePath());     
+   
+            			// Checking whether the file is writable or not  
+            			System.out.println("Is file writeable?: " + f0.canWrite());    
+   
+            			// Checking whether the file is readable or not  
+            			System.out.println("Is file readable " + f0.canRead());    
+   
+            			// Getting the length of the file in bytes  
+            			System.out.println("The size of the file in bytes is: " + f0.length());    
+        		} 
+			else {  
+            			System.out.println("The file does not exist.");  
+       			}  
+  
+				
+		} catch (IOException exception) {  
+                              System.out.println("An unexpected error is occurred.");  
+                              exception.printStackTrace();  
+                  }   
+         
+		//writing content into file
+		try {  
+        		FileWriter fwrite = new FileWriter("NewFile.txt ");  
+        		  
+        		fwrite.write("A named location used to store related information is referred to as a File.");   
+   
+        		// Closing the stream  
+        		fwrite.close();   
+        		System.out.println("Content is successfully wrote to the file.");  
+    		} 
+		catch (IOException e) {  
+        		System.out.println("Unexpected error occurred");  
+        		e.printStackTrace();  
+        	}  
+
+		//reading content from the file
+		        try {  
+            			// Create f1 object of the file to read data  
+            			File f1 = new File("NewFile.txt ");    
+            			Scanner dataReader = new Scanner(f1);  
+            			while (dataReader.hasNextLine()) {  
+                			String fileData = dataReader.nextLine();  
+                			System.out.println(fileData);  
+            			}  
+            			dataReader.close();  
+        		} 
+			catch (FileNotFoundException exception) {  
+            			System.out.println("Unexcpected error occurred!");  
+            			exception.printStackTrace();  
+        		}  
+		
+		//removing file
+		   	File f0 = new File("NewFile.txt");   
+    			if (f0.delete()) {   
+      				System.out.println(f0.getName()+ " file is deleted successfully.");  
+    			} 
+			else {  
+      				System.out.println("Unexpected error found in deletion of the file.");  
+    			}  
+	}
+}
+
+/* output:
+
+File NewFile.txt  is created successfully.
+The name of the file is: NewFile.txt
+The absolute path of the file is: C:\java_program\day3\NewFile.txt
+Is file writeable?: true
+Is file readable true
+The size of the file in bytes is: 0
+Content is successfully wrote to the file.
+A named location used to store related information is referred to as a File.
+NewFile.txt file is deleted successfully.
+*/
+```
