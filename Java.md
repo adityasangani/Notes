@@ -282,7 +282,7 @@ Now in another class when we want to create an instance of School, but we want t
 ```
 School instance = School.getInstance();
 ```
-
+- In java, when we declare local variables, their memory is created in stack, and when we do this -> new int(); then that is stored in heap. So if we do int[] arr = new int[4]; Then in stack, arr will be stored. And in heap, we will have 4 integers with their allocated spaces. In the stack, arr will have the first address of the first integer in the heap.  
 
 ## File Handling in Java
 Stream is a series of data. If you want to store data in byte form, use Byte Stream. If you want to store data in character form, use Character Stream.
