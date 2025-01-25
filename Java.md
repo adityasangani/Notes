@@ -431,3 +431,82 @@ A named location used to store related information is referred to as a File.
 NewFile.txt file is deleted successfully.
 */
 ```
+# Polymorphism
+Polymorphism is a core concept in OOP that allows methods to do different things based on the object it is acting upon, even though the method name and its signature might be the same. 
+Two types: 
+1. Compile Time Polymorphism
+Method overloading comes in this.
+```
+class Calculator{
+	public int add(int a, int b){return a + b;}
+	public int add(int a, int b, int c){return a + b + c;}
+	public double add(double a, double b){return a + b;}
+}
+public class Main{
+	public static void main(String[] args){
+		Calculator calc = new Calculator();
+		calc.add(5,10); //15
+		calc.add(5,10,15); //20
+		calc.add(5.5, 10.5); //10.5
+	}
+}
+```
+The decision on which add method to call will be taken at compile time. 
+
+2. Runtime Polymorphism
+Method overriding comes in this.
+We have a parent class called Animal which has a method called sayHello() which prints "...".
+Now we have two classes, Dog and Cat which extend this class, and override the sayHello with "Woof" and "Meow" respectively.
+Now, in main class, we do this:
+```
+Animal myAnimal = new Animal();
+myAnimal.sayHello(); //prints "..."
+
+Dog dog = new Dog();
+dog.sayHello(); //prints "Woof"
+
+Cat cat = new Cat();
+cat.sayHello(); //prints "Meow"
+
+```
+The above is quite straightforward. The magic happens now. 
+```
+Animal dog = new Dog();
+dog.sayHello(); //prints "Woof"
+
+Animal cat = new Cat();
+cat.sayHello() //prints "Meow"
+```
+So here, we gave reference of the parent class, and we created an object of the subclass instead. We can't do the other way round. 
+
+Here, when we call dog.sayHello(), the JVM will see at runtime that the object was created of Dog class, so even though the reference is of the parent class, it will call the method of the Dog class. Hence this is called Runtime Polymorphism.
+This is called Dynamic Method Dispatch. 
+It is also called Upcasting, since low hierarchy ke object ko hum upper hierarchy ke reference mein daal rahe hain.
+- However, we can do downcasting like this:
+```
+Dog myDog = (Dog) dog; //downcasting
+```
+
+However, if there is an extra method for eg. "sayBye()" in Dog class, which isn't in Animal class, then we cannot do the following: 
+```
+Animal dog = new Dog();
+dog.sayBye(); //This will give us error!!!
+```
+This is because now, this dog can only access those methods of Animal class, but it if it is being overrided by its Dog class, then it will call the overrided methods.
+
+# Abstraction
+- It means hiding internal details. 
+- Regular classes cannot have abstract methods. We have to make the class also abstract. 
+- Abstract methods are basically those methods for which we don't want to give any definition, only declare them.
+- Abstract classes can however contain regular methods! These regular methods are here called "Concrete" methods.
+- It is also fine for an Abstract class to not contain any abstract methods.
+```
+public abstract class Animal {
+	public abstract void sayHello(); 
+	public void sleep(){
+		System.out.println("zzz...");
+	}
+}
+```
+- Now, if we are going to create a class called Dog which extends Animal, then this class Dog must either be declared abstract or implement abstract method 'sayHello()' in Animal. 
+- We cannot create an object of an Abstract class. But we can use Polymorphism to do it indirectly (Animal dog = new Dog(); )
