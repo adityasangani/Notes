@@ -494,6 +494,9 @@ dog.sayBye(); //This will give us error!!!
 ```
 This is because now, this dog can only access those methods of Animal class, but it if it is being overrided by its Dog class, then it will call the overrided methods.
 
+- Trick: Polymorphism = "is a" relationship. <object> is a <reference>. Vehicle v1 = new Car(); is allowed, because "Car is a vehicle". 
+Car c1 = new Vehicle() is not allowed because "Vehicle is not a car". 
+
 # Abstraction
 - It means hiding internal details. 
 - Regular classes cannot have abstract methods. We have to make the class also abstract. 
@@ -510,3 +513,8 @@ public abstract class Animal {
 ```
 - Now, if we are going to create a class called Dog which extends Animal, then this class Dog must either be declared abstract or implement abstract method 'sayHello()' in Animal. 
 - We cannot create an object of an Abstract class. But we can use Polymorphism to do it indirectly (Animal dog = new Dog(); )
+
+- Abstract classes should not have public constructors, only protected Constructors. 
+Constructors of abstract classes can only be called in constructors of their subclasses. So there is no point in making them public. The protected modifier should be enough.
+
+In interfaces, if not mentioned, the methods are implicitly public and abstract. We cannot have "normal" methods unless they are default methods or static methods.
