@@ -52,3 +52,78 @@ Each data communicates with the name node and sends the block report: how much f
 - Rack: A collection of data nodes connected to the same network switch.
   ![image](https://github.com/user-attachments/assets/ffc754f1-83e8-4e5e-a3e6-d6547c0bfa38)
 
+```
+start-dfs.sh
+cd
+hadoop fs -put /home/ubuntu/dataset/sourcedata/departuredelays.csv demo //to copy file to demo
+```
+
+To get first 10 lines of file in hadoop
+```
+hadoop fs -cat demo/departuredelays.csv | head -n 10 //it is prefixed by /user/ubuntu
+```
+
+To do the same without headers: (displaying from the second line outwards)
+```
+hadoop fs -cat demo/departuredelays.csv | head -n 10 | tail +2 //it is prefixed by /user/ubuntu
+```
+![image](https://github.com/user-attachments/assets/cd592ef8-ea6b-4607-9554-1446c7eb6df5)
+
+To rename the file in hadoop
+```
+hadoop fs -mv demo/departuredelays.csv demo/dd.csv
+```
+
+To create another directory:
+```
+hadoop fs -mkdir /user/ubuntu/demo1
+```
+
+To copy dd.csv to demo1
+```
+hadoop fs -cp demo/dd.csv demo1/dd.csv
+```
+
+To remove directory with its contents
+```
+hadoop fs -rm -r demo
+```
+
+To put a file from local to distributed:
+```
+hadoop fs -put /home/ubuntu/dataset/sourcedata/departuredelays.csv demo
+```
+
+To get back a file from distributed to local:
+```
+hadoop fs -get demo1/dd.csv /home/ubuntu/dataset/sourcedata/departuredelays.csv
+```
+
+To get the free space available in hdfs of entire file system
+```
+hadoop fs -df -h
+```
+
+To get the free space available in hdfs of a particular file
+```
+hadoop fs -du -h demo1
+```
+
+```
+hadoop fs -stat "%n %o %r %b %F" demo1/dd.csv
+name logsize replicationfactor filesize filetype
+```
+
+q17 - To change the replication factor. by default usually 1 or 3 (check)
+```
+hadoop fs -setrep -w 3 demo1/dd.csv
+```
+-w here means wait till the operation is complete.
+
+To remove file
+```
+hadoop fs -rm demo1/dd.csv
+```
+
+hadoop fs -D dfs.blocksize=5M -D dfs.replication=2 -put /home/ubuntu/dataset/sourcedata/departuredelays.csv demo1/dd.csv
+![image](https://github.com/user-attachments/assets/3c82c6d2-33d0-4a4b-97e6-cc95b8a1de89)
