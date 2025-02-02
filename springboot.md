@@ -548,3 +548,236 @@ public void deleteId(ObjectId myId, String userName){
 ```
 
 Now for PutMapping, we don't have to do any changes in the user, because uske andar toh JournalEntry ka reference pada hua hai. So we only have to make changes in the journal entry only, which we are already doing. So, what we will do is we will create an overloaded method of saveEntry without the userName parameter. This is because we need the userName parameter for the previous Post and Delete mapping, but we don't need it for Put mapping.
+
+## @Transactional Annotation
+- There is still a flaw here. Saving journal in journal_entries and then saving the reference in the user table is not atomic yet. It means that once if the journal is saved in journal_entries, and then some problem occurs due to which the program ends, then the data would not be saved in user entries, which would create inconsistencies. Hence our goal now is to make those two things atomic/transactional.
+In main application: 
+```
+@SpringBootApplication
+@EnableTransactionManagement
+public class JournalApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(JournalApplication.class, args);
+    }
+
+
+}
+```
+
+In JournalEntryService:
+```
+@Transactional
+    public void saveEntry(JournalEntry journalEntry, String userName){
+        journalEntry.setDate(LocalDateTime.now());
+        User user = userService.findByUserName(userName);
+        JournalEntry savedJournal = journalEntryRepository.save(journalEntry);
+        user.getJournalEntries().add(savedJournal);
+        userService.saveEntry(user);
+    }
+```
+- Everything below @Transactional will now be treated as one operation, and if any one of them fails, then the entire thing will be rollbacked. Isolation will also be enabled.
+- @EnableTransactionManagement finds all those methods which have @Transaction written in them. 
+- But now, who will start the transaction and do the rollback? -> Platform Transaction Manager.
+- However, PlatformTransactionManager is an interface. Its implementation is -> MongoTransactionManager
+
+- MongoDatabaseFactory helps us to connect with the database. Till now, whatever work we have done, we have done it with the help of this MongoDatabaseFactory's instance only. MongoDatabaseFactory is also an interface. Internally, spring will pass MongoDatabaseFactory's implementation, which is SimpleMongoClientDatabaseFactory.class.
+
+In main application: 
+```
+@Bean
+    public PlatformTransactionManager add(MongoDatabaseFactory dbFactory){
+        return new MongoTransactionManager(dbFactory);
+    }
+
+```
+
+Here, spring will find which bean is implementing PlatformTransactionManager.
+But now, doing so will give us an error: 'Transaction numbers are only allowed on a replica set member or mongos' on server localhost:27017'. This is because we must set replica set members for MongoDB local in order to use Transactions. 
+- So now, what we will do is instead we will use MongoDB Atlas, in which they only will configure this for us.
+
+- To make all this cleaner, we can also just create a package called config in our journalApp package. Then create a class in it called TransactionConfig. Annotate it with @Configuration, and with @EnableTransactionManagement.
+
+## MongoDB Atlas
+Here, we will create a cluster. Cluster means it will have multiple nodes (means multiple servers across the regions (check locations of nodes)). Due to this, Replication and Sharding will be possible.
+
+- Replication: Same data's copy will be present in other servers. This is so that if one server goes down, then the request can be sent to the other server instead. 
+- Sharding: Data will be stored in a distributed manner. Let's say students names are from A to Z, and we have two servers. Then we will evenly distribute the students' names on the basis of a key (which will be their name). 
+Lets say our database has 10 students, 5 starting with A, and 5 with B. Then A waale students will be in one server, and B waale students will be on another server.
+
+Why is Sharding Needed?
+When a database grows too large, a single machine may struggle with:
+
+1. Storage Limits – A single server might not be able to store all data.
+2. Slow Queries – Too much data on one machine slows down reads/writes.
+3. High Load – Too many users accessing a single database can create bottlenecks.
+Sharding solves these issues by splitting data across multiple shards (servers), allowing: 
+✅ Parallel processing of queries
+✅ Efficient storage distribution
+✅ Faster reads & writes
+
+Types of Sharding
+1. Range-Based Sharding: Data is divided based on a range of values (e.g., User ID 1-1000, 1001-2000, etc.).
+Easy to implement but shards may become unbalanced if some ranges grow faster.
+
+2. Hash-Based Sharding: Uses a hash function to distribute data across shards randomly.
+Prevents hotspots (uneven load) but requires consistent hashing for scalability.
+
+3. Geographical Sharding: Data is sharded based on location (e.g., users in the US on one shard, Europe on another).
+Good for reducing latency in global applications.
+
+## Spring Security 
+It is a powerful and highly customizable security framework that is often used in Spring Boot applications **to handle authentication and authorization.**
+
+Authentication: Authentication is about verifying identity. [Who are you?]
+Authorization: It is about permissions—once you're authenticated, what are you allowed to do? [What can you do?]
+
+Authentication comes first, then authorization
+
+### Configuration
+```
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+```
+- Once the dependency is added, Spring Boot's auto-configuration feature will automatically apply security to the application.
+- By default, Spring Security uses HTTP Basic Authentication.
+- Means, the client sends an Authorization header ```Authorization:Basic<encoded-string>```. The server decodes the string, extracts the username and password, and verifies them. If they're correct, access is granted. Otherwise, an "Unauthorized" response is sent back.
+
+Encoding: Credentials are combined in a string like ```username:password``` which is then encoded using Base64.
+- By default, all endpoints will be secured. Spring Security will generate a default user with a random password that is printed in the console logs on startup. With that user and password you will have access to all endpoints. 
+- But what we want is customized authentication.
+
+@EnableWebSecurity: This annotation signals Spring to enable its web security support. This is what makes your application secured. It's used in conjunction with @Configuration.
+
+SecurityConfig extends WebSecurityConfigurerAdapter: WebSecurityConfigurerAdapter is a utility class in the Spring Security framework that provides default configurations and allows customization of certain features. By extending it, **you can configure and customize Spring Security for your application needs.**
+
+Lets create a package "config" inside main package, and create a class called "SpringSecurity".
+
+```
+package net.engineeringdigest.journalApp.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+@Configuration
+@EnableWebSecurity
+public class SpringSecurity extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/hello").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin();
+    }
+}
+```
+
+configure method in WebSecurityConfigurerAdapter: This method provides a way to configure how requests are secured. It defines how request matching should be done and what security actions should be applied. 
+
+- http.authorizeRequests(): this tells Spring Security to start authorizing the requests.
+- .antMatchers("/hello").permitAll(): this part specifies that HTTP requests matching the path /hello should be permitted (allowed) for all users, whether they are authenticated or not. 
+- .anyRequest().authenticated(): this is a more general matcher that specifies any request (not already matched by previous matchers) should be authenticated, meaning users have to provide valid credentials to access these endpoints.
+- .and(): this is a method to join several configurations. It helps to continue the configuration from the root (HttpSecurity).
+- .formLogin(): This enables form-based authentication. By default, it will provide a form for the user to enter their username and password. If the user is not authenticated and they try to access a secured endpoint, they'll be redirected to the default login form. 
+
+You can access /hello without any authentication. However, if you try to access another endpoint, you will be redirected to a login form.
+
+- When we use the .formLogin() method in our security configuration without specifying .loginPage("/custom-path"), the default login page becomes active.
+- Spring Security provides an in-built controller that handles the /login path. This controller is responsible for rendering the default login form when a GET request is made to /login.
+- By default, Spring Security also provides logout functionality. When .logout() is configured, a POST request to /logout will log the user out and invalidate their session.
+- Basic Authentication, by its design, is stateless.
+
+![alt text](resources/image4.png)
+
+### We want users to now be able to see ONLY their OWN entries
+We want our Spring Boot application to authenticate users based on their credentials stored in a MongoDB database.
+
+This means that our users and their passwords (hashed) will be stored in MongoDB, and when a user tries to log in, the system should check the provided credentials against what's stored in the database.
+
+Spring Security Structure:
+![alt text](resources/image5.png)
+
+Steps to implement this:
+1. A User entity to represent the user data model
+```
+@Document(collection = "users")
+@Data
+public class User {
+    @Id
+    private ObjectId id;
+    @Indexed(unique = true)
+    @NonNull
+    private String userName;
+    @NonNull
+    private String password;
+    @DBRef
+    private List<JournalEntry> journalEntries = new ArrayList<>();
+    private List<String> roles;
+}
+```
+2. A repository UserRepository to interact with MongoDB.
+```
+public interface UserRepository extends MongoRepository<User, ObjectId> {
+    User findByUserName(String userName);
+}
+```
+3. UserDetailsService implementation to fetch user details.
+
+For this, we will create a new class in service package, UserDetailsServiceImpl
+```
+@Component
+public class UserDetailsServiceImpl implements UserDetailsService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUserName(username);
+        if(user!=null){
+            return org.springframework.security.core.userdetails.User.builder()
+                    .username(user.getUserName())
+                    .password(user.getPassword())
+                    .roles(user.getRoles().toArray(new String[0]))
+                    .build();
+        }
+        throw new UsernameNotFoundException("User not found with username: " + username);
+    }
+}
+```
+4. A configuration SecurityConfig to integrate everything with Spring Security.
+```
+@Configuration
+@EnableWebSecurity
+public class SpringSecurity extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/journal/**").authenticated()
+                .anyRequest().permitAll()
+                .and()
+                .httpBasic();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+}
+```
+
