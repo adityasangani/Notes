@@ -1,3 +1,25 @@
+Hive is a data lake on top of hadoop. 
+
+start-dfs.sh
+start-yarn.sh
+
+In another tab,
+Type “hive”
+create database if not exists goshopping;
+Use goshopping;
+
+create table iplookup(ip string, country string, state string, city string, lat string, long string) row format delimited fields terminated by ‘,’ lines terminated by ‘\n’ stored as textfile
+Two types of delimiter 
+Field terminater 
+Lines terminator 
+
+/user/hive/warehouse is the default 
+
+
+Create database if not exists test1
+Comment ‘holds all the test tables’
+location ‘user/ubuntu/test1’
+
 # Partitioning
 Two types of partitioning: 
 ## Static Partitioning (By Default)
@@ -36,3 +58,4 @@ Now to insert dynamically,
 ```
 insert into table user_data_dynamic partition **(city)** select sno, usr_name, **city** from user_data_no_partition where city='chennai';
 ```
+
