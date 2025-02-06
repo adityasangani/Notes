@@ -24,5 +24,38 @@ In a distributed system, we MUST have Partition Tolerance. So what's left to dec
 ![image](https://github.com/user-attachments/assets/09c7410b-4fd6-42ae-9090-2408c7b47c63)
 
 - Cassandra runs on JRE.
-- 
+
+- Joins and stuff isn't very efficient in distributed systems because one table would be one server, and the other table would be in another server.
+- In Cassandra, we don't use joins. We do Query-first Approach.
+
+## Query First Approach
+We design our tables for a specific query. Some consequences might be that we might write the same data to multiple tables. 
+
+In RDBMS:
+![image](https://github.com/user-attachments/assets/f35863cd-fd9f-4867-8070-86030bed5d3b)
+In Cassandra:
+![image](https://github.com/user-attachments/assets/92acb824-54fc-4a39-839a-9a2cbbb59955)
+Cassandra Tables:
+![image](https://github.com/user-attachments/assets/6b4d4367-b8a2-48a2-8c55-37bd4c9b8418)
+
+Each row in Cassandra represents one entity (just like in MySQL).
+However, the key difference is that in Cassandra, each row can have a different set of columns, whereas in MySQL, every row must have the same fixed columns.
+- Cassandra allows flexible columns per row, whereas MySQL does not.
+
+## Partition Key
+Every piece of data with the same partition key will be stored on the same node in the cluster. 
+So in the above example, our partition key would be the CAR MAKE (BMW, Audi) etc. In the second table, our partition key would be Id. 
+- In Cassandra, we should only access data using the PARTITION KEY.
+- If we want to access data using PRIMARY KEY, we must just create another table.
   
+
+Commands:
+1. cqlsh
+2. describe keyspaces;
+3. create keyspace my_keyspace with replication={'class':'SimpleStrategy', 'replication_factor':'1'};
+4. create table if not exists my_keyspace.shopping_cart (
+   userid text primary key,
+   item_count int,
+   last_update_timestamp timestamp
+   )
+6. insert into my_keyspace.shopping_cart(userid, item_count, last_update_timestamp) values ('9876', 2, toTimeStamp(now())); 
