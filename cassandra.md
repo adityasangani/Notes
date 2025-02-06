@@ -47,6 +47,15 @@ Every piece of data with the same partition key will be stored on the same node 
 So in the above example, our partition key would be the CAR MAKE (BMW, Audi) etc. In the second table, our partition key would be Id. 
 - In Cassandra, we should only access data using the PARTITION KEY.
 - If we want to access data using PRIMARY KEY, we must just create another table.
+
+How does Cassandra achieve this partition?
+- For each partition key, Cassandra passes it through a hash function. The purpose of the hash function is to convert the partition key into a unique id.
+![image](https://github.com/user-attachments/assets/5306d232-47e3-4fed-8f33-dbf53de5ce45)
+These tokens are 64 bit integers.
+
+The values that come out are called Tokens. Cassandra uses these tokens to decide which data will be stored in which node. Now how does it do it?
+
+-> Using the Cassandra ring diagram. Each node will be assigned a token, and it will be responsible for storing data less than the value of that token, but greater than the value of the token assigned to the previous node. 
   
 
 Commands:
