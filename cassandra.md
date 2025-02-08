@@ -210,6 +210,20 @@ select * from employee_by_position order by id;
 This is because: 
 Cassandra does not allow ORDER BY unless the partition key is explicitly filtered using = (EQ) or IN. This is because Cassandra is not optimized for full-table scans like relational databases (e.g., MySQL, PostgreSQL).
 
+![image](https://github.com/user-attachments/assets/08e7d48e-d498-4694-a76b-8e936349da05)
+![image](https://github.com/user-attachments/assets/e3e39265-76e7-4da2-86ca-964a3d2e64d5)
+![image](https://github.com/user-attachments/assets/ccdbff07-8ba4-43cd-9d84-9240dd3c9a71)
+
+## Secondary Index
+-  A secondary index is an index on a column that is not part of the primary key.
+-  It allows you to query data based on non-primary key columns, which would otherwise require a full table scan.
+-  When you create a secondary index on a column, Cassandra creates a hidden table that maps the indexed column's values to the corresponding partition keys. This allows Cassandra to look up rows efficiently when querying by the indexed column.
+Syntax:
+```
+CREATE INDEX ON keyspace_name.table_name (column_name);
+```
+
+
 ## Data Types for Flexibility
 1. Collections
 2. Counters
