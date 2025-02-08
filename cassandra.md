@@ -89,11 +89,117 @@ Why?
 
 ![image](https://github.com/user-attachments/assets/c5d4ef6d-0d46-46ab-8f67-3ca0de441e19)
 
+
+
+## Source Command
+- Source commands allows you to execute a set of CQL statements from a file.
+- The file name must be enclosed in single quotes: ```SOURCE './myscript.cql';```
+- cqlsh will output the results of each command sequentially as it executes.
+
+## Nodes and Configuration
+- Node: One cassandra instance
+- Rack: A logical set of nodes
+- Data Center: a logical set of racks
+- Cluster: the full set of nodes which map a single complete ring.
+![image](https://github.com/user-attachments/assets/59122c0a-c408-4a60-8f08-6fbf39bc2cb0)
+
+### Cluster
+Nodes join a cluster based on the configuration of their own conf/cassandra.yaml file.
+Key settings- 
+1. cluster_name: shared name to logically distinguish a set of nodes.
+2. seeds: IP addresses of initial nodes for a new node to contact and discover the cluster topology.
+3. listen_address: IP address through which this particular node communicates.
+
+#### Node
+- Node has a JVM and it runs a Java process. This Java process is called Cassandra Instance.
+- All data that a node stores will be in a distributed hash table.
+
+### Coordinator and Partitioner In Cassandra
+1. Coordinator:
+A coordinator is the node that receives a client request (read/write) and is responsible for routing it to the appropriate nodes in the cluster.
+- When a client connects to any Cassandra node, that node becomes the coordinator for the request.
+Example:
+Assume we have a 3-node Cassandra cluster with data distributed across them.
+- The client sends a request to Node A.
+- Node A becomes the coordinator.
+- It determines that the data is stored on Node B and Node C.
+- If it's a write request, Node A forwards the request to both nodes.
+- If it's a read request, Node A fetches the data from the fastest node and sends it to the client.
+The coordinator manages the Replication_Factor (RF).
+- RF = Onto how many nodes should a write be copied?
+- RF is set for an entire keyspace, or for each data center, if multiple data centers are present.
+- SimpleStrategy: one factor for entire cluster.
+- NetworkTopologyStrategy: separate factor for each data center in cluster.
+### Consistency
+- Consistenct Level: sets how many of the nodes to be sent a given request must acknowledge that request for a response to be returned to the client.
+
+### Gossip Protocol
+- Once per second, each node contacts 1 to 3 other nodes, requesting and sharing updates about:
+  1. Known node states (heartbeat)
+  2. Known node locations
+  3. Requests and acknowledgements are timestamped, so info is continually uploaded and discarded.
+With this, reliably and efficiently spreads node metadata through the cluster.
+
+2. What is a Partitioner?
+A partitioner is responsible for determining how data is distributed across nodes. It decides which node stores a particular row by computing a hash of the partition key.
+
+## Insert Syntax
+- Requires a value for each component of the primary key, but not for any other columns.
+- Primary Key columns are mandatory.
+- Missing values are set to null.
 ```
-ALTER TABLE table1 ADD another_column text;
-ALTER TABLE table1 DROP another_column;
+INSERT INTO table_name (column_list)
+VALUES (column_values)
 ```
 
+## ALTER Syntax
+```
+ALTER TABLE table1 ADD another_column text; //adding a column
+ALTER TABLE table1 DROP another_column; //dropping a column. primary key columns are not supported.
+ALTER TABLE table1 TYPE FLOAT; //changing a column datatype
+```
+
+Using Alter keyword we can: 
+- change datatype of column
+- add columns
+- drop columns
+- rename columns
+- change table properties
+- WE CANNOT CHANGE THE PRIMARY KEY COLUMNS
+
+## UPDATE Syntax
+```
+UPDATE table_name SET col_name1=value1, col_name2=val2 WHERE primary_key_col=val3;
+```
+- Rows must be identified by values in primary key columns.
+- Primary key columns cannot be updated.
+- An existing value is replaced with a new value. A new value is added if a value for a column did not exist before.
+
+## TRUNCATE Syntax
+- Truncate removes all rows in table.
+- The table schema is not affected.
+```
+TRUNCATE TABLE movies;
+```
+
+## Data Types for Flexibility
+1. Collections
+2. Counters
+3. User Defined Types
+These data types simplify table design, optimize table functionality, store data more efficiently, and might change table designs completely.
+
+### Collections
+- Used to store multiple values within a single column.
+- These are useful when you need to store lists, sets or key-value pairs (Map).
+#### List
+- Stores values in order and allows duplicates.
+```
+CREATE TABLE users (
+    user_id UUID PRIMARY KEY,
+    name TEXT,
+    login_ips LIST<TEXT>
+);
+```
 
 
 ## Partition Key
