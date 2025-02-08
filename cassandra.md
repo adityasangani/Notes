@@ -142,6 +142,10 @@ With this, reliably and efficiently spreads node metadata through the cluster.
 
 2. What is a Partitioner?
 A partitioner is responsible for determining how data is distributed across nodes. It decides which node stores a particular row by computing a hash of the partition key.
+- WHERE clause on any field other than partition key would require a scan of all partitions on all nodes, which is quite inefficient.
+- ALLOW FILTERING: Is scanning over all partitions allowed? (in case if all the columns in PRIMARY KEY is not used in WHERE clause, ALLOW FILTERING clause has to be used).
+- In Apache Cassandra, the ALLOW FILTERING clause allows you to query columns that are not part of the primary key or not indexed. Without ALLOW FILTERING, Cassandra rejects inefficient queries to prevent performance issues.
+- 
 
 ## Insert Syntax
 - Requires a value for each component of the primary key, but not for any other columns.
@@ -181,6 +185,30 @@ UPDATE table_name SET col_name1=value1, col_name2=val2 WHERE primary_key_col=val
 ```
 TRUNCATE TABLE movies;
 ```
+
+## WHERE Command
+We cannot use the WHERE command to query anything which is not the partition key.
+If in case you want to query something which is not the partition key, use ALLOW FILTERING: 
+select * from employee_by_position where name='Aditya' ALLOW FILTERING;
+
+## CLUSTERING ORDER BY
+```
+CREATE TABLE movies_by_genre (
+genre varchar,
+hero varchar,
+year int,
+m_name varchar,
+PRIMARY KEY(genre, hero, year, m_name)
+) WITH CLUSTERING ORDER BY
+(hero ASC, year DESC, m_name ASC)
+```
+CLUSTERING ORDER BY defines how data values in clustering columns are ordered (ASC or DESC) in a table. ASC is default.
+
+WE CANNOT DO THE BELOW COMMAND:
+select * from employee_by_position order by id;
+
+This is because: 
+Cassandra does not allow ORDER BY unless the partition key is explicitly filtered using = (EQ) or IN. This is because Cassandra is not optimized for full-table scans like relational databases (e.g., MySQL, PostgreSQL).
 
 ## Data Types for Flexibility
 1. Collections
