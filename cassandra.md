@@ -56,12 +56,18 @@ These tokens are 64 bit integers.
 The values that come out are called Tokens. Cassandra uses these tokens to decide which data will be stored in which node. Now how does it do it?
 
 -> Using the Cassandra ring diagram. Each node will be assigned a token, and it will be responsible for storing data less than the value of that token, but greater than the value of the token assigned to the previous node. 
-  
+
+![image](https://github.com/user-attachments/assets/ae0dda2a-c1d8-4fa9-acef-f8debd2b9403)
+- Each large rectangle represents a data center.
+- A rack in a data center is basically a cluster of connected machines. 
+
+If replication factor=3, this means that we want our data in our database to be stored on three separate data nodes. 
+- Simple Strategy: We simply find the token for the record we're trying to add it, and add the token to the token range that it would fall in. 
 
 Commands:
 1. cqlsh
 2. describe keyspaces;
-3. create keyspace my_keyspace with replication={'class':'SimpleStrategy', 'replication_factor':'1'};
+3. create keyspace my_keyspace with replication={'class':'SimpleStrategy', 'replication_factor':'1'} AND durable_writes='true'; (by default durable_writes will be true only. If we set it to false, 
 4. create table if not exists my_keyspace.shopping_cart (
    userid text primary key,
    item_count int,
