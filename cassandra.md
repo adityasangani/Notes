@@ -42,6 +42,60 @@ Each row in Cassandra represents one entity (just like in MySQL).
 However, the key difference is that in Cassandra, each row can have a different set of columns, whereas in MySQL, every row must have the same fixed columns.
 - Cassandra allows flexible columns per row, whereas MySQL does not.
 
+In Cassandra, the primary key consists of 1. Partition Key (determines which node stores the data)  2. Clustering Key (determines how data is ordered within a partition)
+2. How to Choose the Partition Key?
+✅ Partition Key MUST be chosen to:
+1️⃣ Distribute data evenly across nodes (avoid overloading a single node).
+2️⃣ Support fast lookups (fetch all relevant data efficiently).
+3️⃣ Ensure queries don’t require scanning the entire cluster.
+
+🚨 Partition Key Pitfalls to Avoid:
+❌ Too Broad (e.g., a single partition for millions of rows → too much data on one node).
+❌ Too Specific (e.g., one partition per row → defeats partitioning, no benefits).
+
+ How to Choose the Clustering Key?
+✅ Clustering Key MUST be chosen to:
+1️⃣ Sort data within a partition (e.g., chronological order).
+2️⃣ Support range queries (e.g., "fetch all purchases between 2022 and 2023").
+3️⃣ Allow efficient filtering (e.g., "latest entry first").
+
+🚨 Clustering Key Pitfalls to Avoid:
+❌ Missing a Clustering Key when multiple rows per partition are needed.
+❌ Wrong sorting order (Cassandra stores clustering keys in ASC order by default).
+
+📌 Syntax:
+```
+PRIMARY KEY ((partition_key), clustering_key_1, clustering_key_2, ...)
+```
+Example 1: Designing a Table for an E-commerce Order System
+💡 Use Case:
+
+Store orders placed by users, retrieving all orders by a specific user efficiently.
+Support fetching recent orders first.
+✅ Schema Choice:
+```
+CREATE TABLE orders (
+    user_id UUID,          -- Partition Key (Distributes data per user)
+    order_time TIMESTAMP,  -- Clustering Key (Sorts orders per user)
+    order_id UUID,
+    item TEXT,
+    total_amount DECIMAL,
+    PRIMARY KEY ((user_id), order_time)
+);
+```
+Why?
+- Partition Key (user_id) → Groups all orders for a user together.
+- Clustering Key (order_time) → Orders purchases chronologically per user.
+
+![image](https://github.com/user-attachments/assets/c5d4ef6d-0d46-46ab-8f67-3ca0de441e19)
+
+```
+ALTER TABLE table1 ADD another_column text;
+ALTER TABLE table1 DROP another_column;
+```
+
+
+
 ## Partition Key
 Every piece of data with the same partition key will be stored on the same node in the cluster. 
 So in the above example, our partition key would be the CAR MAKE (BMW, Audi) etc. In the second table, our partition key would be Id. 
@@ -62,7 +116,8 @@ The values that come out are called Tokens. Cassandra uses these tokens to decid
 - A rack in a data center is basically a cluster of connected machines. 
 
 If replication factor=3, this means that we want our data in our database to be stored on three separate data nodes. 
-- Simple Strategy: We simply find the token for the record we're trying to add it, and add the token to the token range that it would fall in. 
+- Simple Strategy: We simply find the token for the record we're trying to add it, and add the token to the token range that it would fall in.
+
 
 Commands:
 1. cqlsh
@@ -73,4 +128,6 @@ Commands:
    item_count int,
    last_update_timestamp timestamp
    )
-6. insert into my_keyspace.shopping_cart(userid, item_count, last_update_timestamp) values ('9876', 2, toTimeStamp(now())); 
+5. drop table shopping_cart;
+6. 
+7. insert into my_keyspace.shopping_cart(userid, item_count, last_update_timestamp) values ('9876', 2, toTimeStamp(now())); 
