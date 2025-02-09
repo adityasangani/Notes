@@ -179,6 +179,17 @@ UPDATE table_name SET col_name1=value1, col_name2=val2 WHERE primary_key_col=val
 - Primary key columns cannot be updated.
 - An existing value is replaced with a new value. A new value is added if a value for a column did not exist before.
 
+## INSERT vs UPDATE
+Key Differences Between INSERT and UPDATE
+
+|Feature | INSERT   | UPDATE |
+| --------- | --------- | ------- |
+| Purpose| Adds a new row or overwrites an existing row.     |  Modifies an existing row or creates a new row.       |
+| Behavior on Existing Rows     | Overwrites the entire row.          | Updates only the specified columns.         |
+| Behavior on Missing Rows     | Creates a new row.          | Creates a new row (similar to INSERT).        |
+| Unspecified Columns     | Set to null (or default values).          |  Retain their existing values.
+
+
 ## TRUNCATE Syntax
 - Truncate removes all rows in table.
 - The table schema is not affected.
@@ -223,6 +234,64 @@ Syntax:
 CREATE INDEX ON keyspace_name.table_name (column_name);
 ```
 
+## TTL Option (Time-to-live)
+- Defines expiring columns.
+- INSERT and UPDATE can optionally assign data values a time-to-live.
+- Expired columns/values are eventually deleted.
+- With no TTL specified, columns/values never expire.
+
+Example of TTL (Insert with TTL as 60 seconds)
+```
+INSERT INTO users(userid, name, location)
+VALUES(55, 'Raju', 'Bangalore') using TTL 60;
+```
+
+## Counter Columns
+- Counter column stores a number that can only be updated (incremented or decremented).
+- Initial value is always 0.
+- Cannot be part of primary key.
+- If a table has counter column, all non-counter columns must be part of primary key.
+Syntax:
+```
+CREATE TABLE valid_counter_table (
+    id int,
+    name text,          -- Non-counter column part of primary key
+    views counter,      -- Counter column
+    PRIMARY KEY (id, name)
+);
+```
+
+You cannot insert values into a counter column using an INSERT statement. Instead, you must use an UPDATE statement to initialize or modify the counter.
+Syntax:
+```
+UPDATE valid_counter_table
+SET views = views + 1
+WHERE id = 1 AND name = 'Aditya';
+```
+
+## UUID & TIMEUUID
+- They are universally unique identifiers.
+```
+create table track_by_user(userId uuid, activity timeuuid, movie_name varchar, primary key(userId, activity)) with clustering order by (activity desc);
+insert into track_by_user (userid, activity, movie_name) VALUES ( uuid(), now(), 'Bahubali');
+```
+
+### INSERT with COPY
+```
+COPY track_by_user(userId, activity, movie_name) from 'tabledata.csv';
+COPY track_by_user(userId, activity, movie_name) from 'tabledata.csv' WITH HEADER=true; //This option specifies that the first row of the CSV file contains column headers. Cassandra will skip the first row when importing data.
+```
+
+## USER-DEFINED TYPE (UDT)
+- Consists of group related fields of information.
+```
+CREATE TYPE track
+(
+movie_name varchar,
+year int,
+track_title varchar
+);
+```
 
 ## Data Types for Flexibility
 1. Collections
@@ -233,13 +302,17 @@ These data types simplify table design, optimize table functionality, store data
 ### Collections
 - Used to store multiple values within a single column.
 - These are useful when you need to store lists, sets or key-value pairs (Map).
-#### List
+- Collection columns cannot be part of a primary key, partition key, clustering column, inside of another collection.
+
+#### List, Set, Map
 - Stores values in order and allows duplicates.
 ```
 CREATE TABLE users (
     user_id UUID PRIMARY KEY,
     name TEXT,
-    login_ips LIST<TEXT>
+    login_ips LIST<TEXT>,
+    emails SET<TEXT>,
+    profile MAP<text, text>
 );
 ```
 
