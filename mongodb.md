@@ -16,6 +16,28 @@
 - 12 bytes. First 4 bytes are a timestamp.
 - In MongoDB, each document stored in a collection requires a unique _id field that acts as a primary key.
 
+# Projection
+- find() method accepts second optional parameter that is list of fields to display.
+- 1 is used to show the field
+- 0 is used to hide the fields.
+```
+db.COLLECTION_NAME.find({}, {KEY:1})
+```
+- _id field is always displayed while executing find() method, if you don't want this field then you need to set it as 0.
+
+# Limit and Skip
+```
+db.COLLECTION_NAME.find().limit(NUMBER).skip(NUMBER)
+```
+
+# SORT Records
+- 1 is used for ascending order.
+- -1 is used for descending order.
+```
+db.COLLECTION_NAME.find().sort({KEY:1})
+db.users.find().sort({city:1, age:-1})
+```
+
 # Dot Notation
 - contribs: ["Turing machine", "Turing test", "Turingery"]
 - To specify the third element in the contribs array, "contribs.2".
