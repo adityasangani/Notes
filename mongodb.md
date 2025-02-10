@@ -1,3 +1,98 @@
+# Database
+- It is a physical container for collections.
+- A single MongoDB server has multiple databases.
+
+# Collection (eq. table)
+- It is a group of MongoDB documents. It is equivalent to RDBMS table.
+  
+# Document
+- It is a set of key-value pairs.
+- MongoDB stores BSON documents, i.e. data records in collections; the collections in databases.
+
+![image](https://github.com/user-attachments/assets/db626809-d384-4a8e-87ee-aa61dcccaf54)
+
+# ObjectID
+- Small, ordered.
+- 12 bytes. First 4 bytes are a timestamp.
+- In MongoDB, each document stored in a collection requires a unique _id field that acts as a primary key.
+
+# Dot Notation
+- contribs: ["Turing machine", "Turing test", "Turingery"]
+- To specify the third element in the contribs array, "contribs.2".
+![image](https://github.com/user-attachments/assets/42fa8651-0048-4769-9676-8ddf8651bf0f)
+
+# _ID Field in MongoDB Document
+- _id field is always the first field in the documents. If the server receives a document that does not have _id field first, then the server will move the field to the beginning.
+
+# Start MONGODB Service
+- By default the mongod process uses the /data/db directory.
+- In one terminal ```mongod``` and in another terminal ```mongo```.
+- To stop mongoDB, press Ctrl + C in the mongod terminal.
+- If you end a line with (, {, [, then you can write in the next lines until you close them with the corresponding ), }, ].
+## Basic Commands
+```
+show dbs //show databases
+use mydb //if mydb database doesn't exist, mongoDB will create it when you insert data
+db.createCollection("myTestDB") //create a collection
+show collections //to see all the collections
+db.myTestDB.insertOne({name:"John", age:30}) //inserting a document
+db.myTestDB.insertMany([{name:"David", age:24},{name:"Mariah", age:56}]) //inserting many documents
+db.myTestDB.find() //finds all documents
+db.myTestDB.find({name:"John"}) //find documents where name is "John"
+db.myTestDB.updateOne({name:"John"}, {$set:{age:88}}) //updating a document
+db.myTestDB.deleteOne({name:"John"}) //delete a document
+db.myTestDB.drop() //drop a collection
+db.dropDatabase() //drop a database
+```
+
+## Querying Data
+```
+db.myTestDB.find({age:{$gt:25}}) //find those with age greater than 25
+```
+
+Comparison Operators
+- ```$gt``` : Greater than
+- ```$lt``` : Less than
+- ```$eq``` : Equal to
+- ```$ne``` : Not equal to
+- ```$gte``` : Greater than or equal to
+- ```$lte``` : Less than or equal to
+
+```
+db.myTestDB.find({ $or: [{age:25}, {name:"John"}] })
+```
+
+Logical Operators
+- ```$and``` : Logical AND
+- ```$or``` : Logical OR
+- ```$not``` : Logical NOT
+- ```$nor``` : Logical NOR
+
+Array Operators
+- ```$in``` : Matches any value in an array
+- ```$nin``` : Matches none of the values in an array
+- ```$all``` : Matches all values in an array
+
+```
+db.myTestDB.find({name: {$in: ["John", "Hopkin"]}})
+```
+
+Querying an Array
+Use $elemMatch operator to specify multiple criteria on the elements of an array such that at least one array element satisfies all the specified criteria.
+```
+db.myTestDB.find({age: {$elemMatch: {$gt:22, $lt:30}}})
+```
+
+## Indexing
+An index in MongoDB is like the index in a book—it helps MongoDB find data faster. Instead of scanning the entire collection, MongoDB uses indexes to efficiently locate documents.
+
+👉 Without an index: MongoDB scans all documents (called a collection scan).
+👉 With an index: MongoDB quickly looks up the required documents, making queries much faster.
+
+### Creating an Index
+By default, MongoDB creates an _id index on every document. But we can create our own indexes to speed up queries.
+
+
 # Nodes
 In simple terms, nodes in MongoDB are just servers (whether physical, virtual, or cloud-based) that run instances of the MongoDB database software. These nodes store, manage, and process data, and they can work together as part of a larger database system to provide features like data redundancy, scalability, and fault tolerance.
 - A node = A server running MongoDB.
@@ -297,3 +392,5 @@ sh.status()
 It should show: 
 ✅ Shards added
 ✅ Sharded database & collection
+
+
