@@ -30,3 +30,55 @@ Key Characteristics of RDD:
 - Lazy Evaluation: Transformations are not executed immediately; they are only computed when an action is triggered.
 - Fault-Tolerant: Automatically recovers from failures using lineage (i.e., remembers how it was created).
 - Low-Level API: Requires more effort for optimizations.
+
+![image](https://github.com/user-attachments/assets/b9c6f5fd-876c-4542-868e-6c2742768561)
+
+The lower part of the image represents the architecture of Apache Spark:
+
+**SPARK CORE (Foundational Layer)**
+
+This is the main processing engine that provides:
+- Task scheduling.
+- Memory management.
+- Fault recovery.
+- RDD abstraction.
+
+**RDD (Low-Level Abstraction)**
+
+RDDs (Resilient Distributed Datasets) are immutable, distributed collections of objects.
+They support transformations and actions to process large-scale data.
+
+**Higher-Level Libraries Built on Spark Core:**
+
+**SPARK SQL (Semi-structured Data Processing)**
+
+Allows querying structured and semi-structured data using SQL.
+Uses DataFrames and Datasets for optimization.
+
+**SPARK STREAMING (Real-time Data Processing)**
+
+Handles real-time data streams (e.g., from Kafka, Flume, Twitter).
+Uses micro-batching to process data continuously.
+
+**MLlib (Machine Learning Library)**
+
+Provides scalable ML algorithms for classification, regression, clustering, etc.
+
+**GraphX (Graph Processing)**
+
+Optimized for graph computation.
+Used for social network analysis, PageRank, etc.
+
+## RDD
+- Internally, RDDs are partitioned, so that they can be processed efficiently.
+- Data is distributed in memory across the worker nodes for parallel computation.
+![image](https://github.com/user-attachments/assets/2cc0264d-a5e0-4a30-86c0-bc62108695b4)
+- RDD is an immutable collection of objects which computes on the different node of the cluster.
+- To modify RDDs, there are only two types of operations: 1. Transformations 2. Actions
+
+### Transformation
+- Converts an RDD into another RDD.
+- You can transform your RDD as many times as you want.
+- These transformations are nothing but methods that you have to call on the RDD.
+- The actual data processing doesn't happen immediately.
+- It happens only when user requests a result.
