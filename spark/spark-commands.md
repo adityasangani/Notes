@@ -67,3 +67,76 @@ rdd0.toDebugString()
 ```
 
 pairRDD is a tuple of size 2 -> (key, value) waale.
+
+If we are using a .py file instead of using the REPL, then we must declare SparkContext initially by ourselves.
+```
+import os
+from 
+```
+Execute it outside the pyspark shell.
+
+# Spark SQL
+```
+spark.createDataFrame([('Alice', 1)]).show() //here it self assigns the column names as __1, __2.
+spark.createDataFrame([('Alice', 1)], ['name','age']).show()
+```
+
+![image](https://github.com/user-attachments/assets/c325f379-940d-4d29-b6e2-163e32c6f144)
+
+[pyspark.sql.SparkSession.createDataFrame — PySpark 3.5.4 documentation](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.SparkSession.createDataFrame.html)
+
+Creating DF using different data sources - files/databases
+- We need a dataframe reader object (using the Spark Session object). ```spark.read (returns dataframe reader object)```
+- We need a dataframe writer object to persist dataframe to files/external sources ```df.write```
+- When we load data from Parquet or Json, no need to specify schema as it is already evident.
+
+![image](https://github.com/user-attachments/assets/e7e7481e-95c8-4249-9f94-50ee2f7bb587)
+
+For json files:
+```
+df = spark.read.json('file:///home/ubuntu/Desktop/employee.json')
+df = spark.read.format('json').load('file:///home/ubuntu/Desktop/employee.json')
+//both above give same result
+
+```
+
+For csv/any delimited files
+```
+dfcsv = spark.read.option("delimiter","\t").csv('file:///home/ubuntu/dataset/sourcedata/webclicksdata/goShopping_webclicks2.dat')
+dfcsv.show(5)
+```
+
+Select:
+![image](https://github.com/user-attachments/assets/67ecd9ed-2e5b-4cdb-aa67-5ae6089dd149)
+![image](https://github.com/user-attachments/assets/672b522d-4ce3-4567-aa7d-ffd45aa4bf52)
+![image](https://github.com/user-attachments/assets/b83945af-7501-4036-987a-a395605488cc)
+
+❌ df_webclicks.count().show() → Error (because count() returns an int)
+✅ df_iplookup.groupBy("country").agg(count("customer_id")).show() → Works (because it returns a DataFrame)
+1️) Why Does df_webclicks.count().show() Give an Error?
+```
+print(df_webclicks.count())  # Works correctly
+```
+df_webclicks.count() returns an integer, which represents the total number of rows in the DataFrame.
+Integers do not have .show() because .show() is a method of a DataFrame, not an integer.
+Hence, df_webclicks.count().show() throws an error.
+
+2️) Why Does .show() Work for Grouped Count?
+```
+df_iplookup.groupBy("country").agg(count("customer_id").alias("num_customers")).show()
+```
+Here, groupBy() creates a new DataFrame.
+agg(count("customer_id")) counts the customer_id occurrences for each country, returning a DataFrame, not an integer.
+Since .show() works on DataFrames, this command runs without error.
+
+## Views
+Creating views from Dataframes
+- it is temporary
+```
+df.createOrReplaceTempView("empview");
+//now to query this view
+spark.sql("select empno from empview") //this will give us dataframe object
+spark.sql("select empno from empview").show()
+spark.sql("select empno from empview").write('file:///home/ubuntu/e_out');
+spark.sql("select empno from empview").write.format('json').save('file:///home/ubuntu/e_out');
+```
