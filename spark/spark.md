@@ -75,6 +75,7 @@ Used for social network analysis, PageRank, etc.
 ![image](https://github.com/user-attachments/assets/2cc0264d-a5e0-4a30-86c0-bc62108695b4)
 - RDD is an immutable collection of objects which computes on the different node of the cluster.
 - To modify RDDs, there are only two types of operations: 1. Transformations 2. Actions
+- Whenever we take in a textFile into RDD, by default the data type of the values is string.
 
 ### Transformation
 - Converts an RDD into another RDD.
@@ -82,3 +83,34 @@ Used for social network analysis, PageRank, etc.
 - These transformations are nothing but methods that you have to call on the RDD.
 - The actual data processing doesn't happen immediately.
 - It happens only when user requests a result.
+
+# Spark SQL
+- Spark SQL operates with Catalyst Optimizer (Tungsten Project).
+- We can use Spark SQL when we want to process structured data.
+- Ways to interact with Spark SQL:
+    - Dataframe API (using python)
+    - SQL <br>
+MySQL = OLTP <br>
+Redshift, Hive, BigQuery, SparkSQL = OLAP
+
+
+Entry point into Spark Core functionality = Spark Context
+Entry point into Spark SQL functionality = Spark Session
+![image](https://github.com/user-attachments/assets/4e9e7e51-8a68-427b-8ca3-21c4018ac6a0)
+
+We already have Spark Session available as "spark" in REPL.
+
+## Dataframes
+- Similar to tables
+- Distributed (partitioned just like RDDs) collection of data organized into named columns.
+- Can be constructed from structured data files, existing RDDs.
+
+![image](https://github.com/user-attachments/assets/6c9e49f2-2187-4d64-9f8f-17451c28515c)
+![image](https://github.com/user-attachments/assets/172fbd0e-48fe-40b9-8a72-8156ea087ec1)
+
+```
+location_schema = "IP string, Country string, State string, City string, ApproxLat string, ApproxLng string"
+location_df = spark.read.schema(location_schema).csv('file:///home/ubuntu/dataset/sourcedata/webclicksdata/goShopping_IpLookup.txt', sep=',', inferSchema=True)
+location_df.show(5, truncate=False)
+location_df.printSchema()
+```
