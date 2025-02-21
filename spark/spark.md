@@ -139,4 +139,20 @@ or - df = spark.read.csv("path", sep="\t", header=True, inferSchema=True)
 
 DF needs to be registered - Create view and execute SQL queries. 
 
+# Spark Streaming
+
 Spark Streaming- it processes live streaming data by processing it in micro batches. like it will take in input data for 10 seconds, and then process it that batch of data. so there is very less latency but latency is still there. 
+
+![image](https://github.com/user-attachments/assets/017f2e4e-412f-4c59-ab6c-550558313a66)
+
+- If we do the normal groupBy, we will have to update our count every time, after each new batch comes. This is very difficult.
+- Hence we don't need to maintain the state end to end.
+- In the third row, we see a new way to do this. It keeps count only until 10 seconds. Then its count is reset, and it starts counting again. This concept is called "windowing". We have to configure the required window length based on our use case. Spark requires information about the time in order to execute this. For this, we have something called the "event time" which is the time at which the event is generated.
+- So, (event, eventtime) is supplied to spark (event here is the data).
+```
+groupBy(window(timecolumnname, "10 seconds").groupingColumnname).count()
+```
+![image](https://github.com/user-attachments/assets/2a54d86b-929b-4369-99ef-f540597ed5fa)
+![image](https://github.com/user-attachments/assets/00efdde6-c87e-4a56-9a44-9f7c8e4ce580)
+
+
