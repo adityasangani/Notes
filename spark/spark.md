@@ -114,3 +114,27 @@ location_df = spark.read.schema(location_schema).csv('file:///home/ubuntu/datase
 location_df.show(5, truncate=False)
 location_df.printSchema()
 ```
+
+Two types of transformations: narrow (map, filter) and wide (groupby, reduceby).  
+1 stage will be broken down into --> no of partitions = no of tasks.  
+
+Spark Ecosystem -
+1. spark core: low level API - RDD - immutable, lineage - toDebugString()
+- Tx - lazily evaluated - DAG - reducebyKey
+- Actions - Immediately evaluated - count, sum, take, reduce
+- Create RDD - 1. sc.parallelize (python list, <no of partition>)
+            - 2. sc.textFile(pathoffile, <min no of partition>
+            - 3. rdd1 = derive rdd0
+            - 4. dataframe.rdd
+- Structure of data inside RDD - ["",""], [(),()]
+- Execution of standalone app - spark-submit
+
+2. spark SQL: entry point = spark session
+- dataframe: create df - 1. spark.createDataFrame(python list of tuples/dict/RDD, <schema>)
+    schema = [col1, col2] or "col1 string, col2 int" or StructType([StructField("col1", StringType(), True), StructField("col2", StringType(), True)]). 
+            2. creating df from external sources : spark.read.format("csv").schema().option().load(<path>)
+or - df = spark.read.csv("path", sep="\t", header=True, inferSchema=True)
+- df = spark.read.json("path")
+3. rdd.toDf() but here RDD should be in the apppropriate format. 
+
+DF needs to be registered - Create view and execute SQL queries. 
