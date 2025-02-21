@@ -138,3 +138,5 @@ or - df = spark.read.csv("path", sep="\t", header=True, inferSchema=True)
 3. rdd.toDf() but here RDD should be in the apppropriate format. 
 
 DF needs to be registered - Create view and execute SQL queries. 
+
+Spark Streaming- it processes live streaming data by processing it in micro batches. like it will take in input data for 10 seconds, and then process it that batch of data. so there is very less latency but latency is still there. 
