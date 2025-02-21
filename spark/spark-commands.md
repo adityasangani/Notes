@@ -129,6 +129,9 @@ Here, groupBy() creates a new DataFrame.
 agg(count("customer_id")) counts the customer_id occurrences for each country, returning a DataFrame, not an integer.
 Since .show() works on DataFrames, this command runs without error.
 
+![image](https://github.com/user-attachments/assets/7d4a4cec-0f1c-40dc-b244-6a3dcc3b2730)
+
+
 ## Views
 Creating views from Dataframes
 - it is temporary
@@ -139,4 +142,101 @@ spark.sql("select empno from empview") //this will give us dataframe object
 spark.sql("select empno from empview").show()
 spark.sql("select empno from empview").write('file:///home/ubuntu/e_out');
 spark.sql("select empno from empview").write.format('json').save('file:///home/ubuntu/e_out');
+```
+
+## Spark Streaming
+3 tabs
+Tab1 (data source): This will be our data source. Always stop this netcat server using Ctrl+C, and not closing the tab directly (if you close tab directly, then restart VM). 
+```
+nc -lk 9999
+//now keep writing anything. Once we hit enter, all of what we have written will be available in that port number 9999
+```
+Tab2: Spark Streaming app:
+```
+lines = spark.readStream.format("socket").option("host", "localhost").option("port", 9999).load() //with this, spark is making connection with the data coming at 9999 from netcat. this will give us a dataframe.
+lines.writeStream.outputMode("complete").option("checkpoint", "file:///home/ubuntu/checkdir").format("console").start()
+```
+<br>
+Tab3: start hadoop, master, slaves.
+<br>
+
+Use 2 terminals
+ 
+ 
+NOTE: Start the netcat server first and then the streaming application
+ 
+Terminal 1 : For netcat server
+ 
+      nc -lk 9999 <hit enter>
+<enter senetence  hit enter to publish it on 9999 port>
+ 
+ 
+NOTE: To stop server , press CTRL +C
+ 
+ 
+ 
+Terminal 2 : For pyspark shell
+ 
+ 
+lines = spark.readStream.format("socket").option("host", "localhost").option("port", 9999).load()
+lines.writeStream.outputMode("complete").option("checkpointLocation", "file:///home/ubuntu/checkdir").format("console").start()
+
+Streaming doesn't support .show().
+- Here also, we need:
+   - StreamingDFReader: Helps construct the streaming df from streaming data sources (socket, file system, kafka)
+   - StreamingDFWriter: Helps us write the streaming computation result onto the sink (console/file/kafka)
+     ```
+     df.writeStream.outputMode("update").option("checkpointLocation", "file:///home/vagrant/checkdir100").format("console").start() //format here means where we want to see the final result. outputMode here controls whcih part of the result table has to be written to external sink in each trigger. There are three output modes: update, append, complete.
+     ```
+
+### Questions:
+1. Find total time spent on shopping site by each customer  
+
+2. How many number of searches happened from each device type over every 30 seconds 
+
+3. How many times "Jewellery"  products are searched over every 30 seconds, refresh the results every 10seconds 
+
+#### Answer for Q1
+
+In one tab: Write this: 
+```
+gedit streaming_webclicks.py
+```
+
+Then in streaming_webclicks.py: 
+```
+import time
+import sys
+def send_data_one_per_second():
+	with open('/home/ubuntu/dataset/sourcedata/webclicksdata/goShopping_webclicks1.dat', 'r') as file:
+		next(file)
+		for line in file:
+			print('{}' .format(line.strip()))
+			sys.stdout.flush()
+			time.sleep(0.5)
+if __name__=="__main__":
+	send_data_one_per_second()
+```
+
+Next, write this (make sure you aren't running nc -lk 9999 in another tab): 
+```
+python stream_webclicks.py | nc -lk 9999 
+```
+Then, 
+
+```
+from pyspark.sql.functions import sum, count, split, col, window, to_timestamp, concat_ws
+
+spark = SparkSession.builder.appName("WebClicksStreaming").getOrCreate()
+
+
+raw_stream = spark.readStream.format("socket").option("host", "localhost").option("port", 9999).load()
+
+columns = ["date", "time", "hostIp", "csMethod", "customerIp", "url", "timeSpent", "redirectedFrom", "deviceType"]
+
+df = raw_stream.withColumn("data", split(col("value"), "\t")).selectExpr("data[0] as date", "data[1] as time", "data[2] as hostIp","data[3] as csMethod", "data[4] as customerIp", "data[5] as url", "data[6] as timeSpent", "data[7] as redirectedFrom", "data[8] as deviceType").withColumn("timeSpent", col("timeSpent").cast("int"))
+
+total_time_spent=df.groupBy("customerIp").agg(sum("timeSpent").alias("total_time_spent"))
+
+query1=total_time_spent.writeStream.outputMode("complete").format("console").start()
 ```
