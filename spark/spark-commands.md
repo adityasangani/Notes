@@ -81,6 +81,11 @@ spark.createDataFrame([('Alice', 1)]).show() //here it self assigns the column n
 spark.createDataFrame([('Alice', 1)], ['name','age']).show()
 ```
 
+![image](https://github.com/user-attachments/assets/ec474032-8c8f-43cf-b74d-71d3088bef9a)
+![image](https://github.com/user-attachments/assets/922c5a59-a106-40e0-95a1-4ec78542f891)
+![image](https://github.com/user-attachments/assets/9ad46a30-dfb2-49a5-a113-754a9268e13b)
+
+
 ![image](https://github.com/user-attachments/assets/c325f379-940d-4d29-b6e2-163e32c6f144)
 
 [pyspark.sql.SparkSession.createDataFrame — PySpark 3.5.4 documentation](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.SparkSession.createDataFrame.html)
@@ -131,6 +136,13 @@ Since .show() works on DataFrames, this command runs without error.
 
 ![image](https://github.com/user-attachments/assets/7d4a4cec-0f1c-40dc-b244-6a3dcc3b2730)
 
+![image](https://github.com/user-attachments/assets/a555f290-9ea6-46dc-aece-5510dc1104f4)
+![image](https://github.com/user-attachments/assets/f9f19fb3-1bd5-4c38-86bd-ecd9b4e7bb0a)
+![image](https://github.com/user-attachments/assets/58255109-b260-4c2e-977a-929aac5a647c)
+![image](https://github.com/user-attachments/assets/c9f4c08c-13af-4b6f-a94e-2b29ee8c45d9)
+![image](https://github.com/user-attachments/assets/67f11ec4-ae89-461c-94aa-d455beb8afce)
+
+
 
 ## Views
 Creating views from Dataframes
@@ -143,6 +155,12 @@ spark.sql("select empno from empview").show()
 spark.sql("select empno from empview").write('file:///home/ubuntu/e_out');
 spark.sql("select empno from empview").write.format('json').save('file:///home/ubuntu/e_out');
 ```
+
+![image](https://github.com/user-attachments/assets/a7c9df7b-54ec-454b-9273-2cc8b612dce2)
+![image](https://github.com/user-attachments/assets/59cd4d42-75b4-4be1-81ca-436d36d1c516)
+![image](https://github.com/user-attachments/assets/86238cd2-687c-4096-90d0-f350f1d931a2)
+![image](https://github.com/user-attachments/assets/a7a18c5c-84d4-4480-a90f-a6059c56a76c)
+
 
 ## Spark Streaming
 3 tabs
@@ -188,6 +206,10 @@ Streaming doesn't support .show().
      ```
      df.writeStream.outputMode("update").option("checkpointLocation", "file:///home/vagrant/checkdir100").format("console").start() //format here means where we want to see the final result. outputMode here controls whcih part of the result table has to be written to external sink in each trigger. There are three output modes: update, append, complete.
      ```
+![image](https://github.com/user-attachments/assets/214163a2-77db-440d-bfb0-71df42e49926)
+![image](https://github.com/user-attachments/assets/d218ed5a-aa25-4bd1-8652-a32355ee3e2a)
+![image](https://github.com/user-attachments/assets/28ff5c7a-aef9-4e13-a3ee-3110a7e204c7)
+
 
 ### Questions:
 1. Find total time spent on shopping site by each customer  
@@ -239,4 +261,11 @@ df = raw_stream.withColumn("data", split(col("value"), "\t")).selectExpr("data[0
 total_time_spent=df.groupBy("customerIp").agg(sum("timeSpent").alias("total_time_spent"))
 
 query1=total_time_spent.writeStream.outputMode("complete").format("console").start()
+```
+
+Q2)
+```
+df = df.withColumn("timestamp", to_timestamp(concat_ws(" ", col("date"), col("time")), "MM/dd/yyyy HH:mm:ss"))
+search_counts = df.groupBy(window(col("timestamp"), "30 seconds"), col("deviceType")).agg(count("*").alias("num_searches"))
+query2=search_counts.writeStream.outputMode("update").format("console").start()
 ```
