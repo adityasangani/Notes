@@ -33,6 +33,10 @@ if(n==i) return;
 ### 1. Parameterized Recursion
 - In this, we pass additional parameters that **help** in computing the result.
 - Useful when we need to maintain a running sum, count, or accumulated value.
+- Used when recursion is used for side effects (printing, updating global/state variables, etc.)
+- When we don't necessarily need a return value, just a modification to state.
+- When iterative conversion is easy (since parameterized recursion mimics loops)
+- **When thinking of parameterized recursion, first always think of the solution using for loops. Once that is done, then you can easily convert it into parameterized recursion using the same logic you used in for loops.**
 - Example: sum of first ```n``` numbers
 ```
 void sum(int n, int s) {
