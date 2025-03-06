@@ -461,3 +461,32 @@ Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/myDB",
 ```
 - ```DriverManager.getConnection()``` is a Factory Method that creates the correct database connection.
 - You don’t manually create ```MySQLConnection```, ```PostgreSQLConnection```, etc.
+
+
+## Abstract Factory (Factory of Factories)
+### Understanding with a Simple Analogy
+Imagine you are ordering a Pizza Meal 🍕🥤 from a restaurant.
+
+You don’t just get a pizza—you also get a drink with it!
+
+➡ If you order an Italian Meal, you get:
+- Margherita Pizza 🍕
+- Italian Soda 🥤
+
+➡ If you order an American Meal, you get:
+- BBQ Chicken Pizza 🍕
+- Coca-Cola 🥤
+
+This means:  
+- Each meal has a specific pizza & drink.
+- We need a factory for each meal type (Italian/American).
+- A single Factory is not enough → We need an Abstract Factory!
+
+### Why use Abstract Factory?
+The normal Factory Pattern creates only one type of object (e.g Pizza).  
+But what if we need multiple related objects (Pizza + Drink)?
+- Abstract Factory helps by creating a family of related objects.
+
+Example: 
+
+
