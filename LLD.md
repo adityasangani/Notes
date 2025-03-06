@@ -1,4 +1,4 @@
-# 1.SOLID Principle
+# 1. SOLID Principle
 - S = Single Responsibility Principle
 - O = Open/Closed Principle
 - L = Liskov Substitution Principle
@@ -139,7 +139,7 @@ class SpecialDrive implements DriveStrategy{
 ![image](https://github.com/user-attachments/assets/6180a661-b80d-4bc2-8132-cac6e64d9186)
 
 
-# 3.Observer Design Pattern - Walmart Interview Question
+# 3. Observer Design Pattern - Walmart Interview Question
 Question: Implement "Notify Me" under a product (say iPhone) in Amazon website. We have to send a notification to all those that have clicked Notify Me whenever that product comes back for sale.
 ![image](https://github.com/user-attachments/assets/be4976c6-adc8-47f6-9062-d598f208a2a5)  
 
@@ -324,3 +324,140 @@ class IphoneObservableImpl implements StocksObservable{
     }
 }
 ```
+
+# 4. Decorator Design Pattern
+We have a base object. The base object has some features. Now lets say we want to add additional features. So for this we will wrap this base object in a Decorator (which itself is an object).  
+We can also wrap the Decorator with another Decorator which will have all the features + some additional feature.  
+![image](https://github.com/user-attachments/assets/f660867e-08f6-4df3-905d-0f1df7bf88d4)  
+
+## Use cases
+1. Pizza Shop:
+Here, lets say we have made a base pizza. Now, the toppings that we can add are extra cheese, mushroom, jalapeno, extra veggies.
+![image](https://github.com/user-attachments/assets/103c9594-233a-4a2e-97f7-f8d7abc1d2a2)
+2. Coffee
+- Here lets say we have base coffee (Espresso). Now additional toppings can be added such as cream, extra milk, etc.
+3. Car
+- Base car. Extra features: cover seat, A.C, power steering, fog light.
+
+## Why do we need Decorator Pattern?  
+1. To Prevent Class Explosion
+Lets say we have a base car (Vehicle).
+- Now, lets make a class called BaseCar+AC (with feature AC=true, and AC functionality).
+- Next lets make a class called BaseCar+AC+PowerSteering.
+As we can see, this has made us make many classes.
+
+This is where Decorator Pattern comes into the picture. Here, the Base class will be the same.  
+In this, we will have an abstract base class. (Lets say its called BasePizza).  
+- It has a cost() function.
+
+Since Decorator "has-a" base object:  
+![image](https://github.com/user-attachments/assets/323ccc0a-d623-4247-ad8b-54b19d31fb50)  
+
+But we should also remember that Decorator itself is also a pizza, which can be further decorated. Therefore, the Decorator is also a BasePizza.  
+![image](https://github.com/user-attachments/assets/0ce970dc-0fc7-44ae-afd7-dc6f7be8c393)
+
+![image](https://github.com/user-attachments/assets/e265c3ed-2b97-4e2e-a162-6be7d5695efb)
+
+Code:  
+```
+// "static void main" must be defined in a public class.
+public class Main {
+    public static void main(String[] args) {
+        BasePizza adityapizza = new Mushroom(new ExtraCheese(new Margherita()));
+        int cost = adityapizza.cost();
+        System.out.println("Cost of Aditya's pizza is: " + cost);
+        
+    }
+}
+
+abstract class BasePizza {
+    public abstract int cost();
+}
+
+class Farmhouse extends BasePizza{
+    public int cost(){
+        return 200;
+    }
+}
+
+class VegDelight extends BasePizza{
+    public int cost(){
+        return 120;
+    }
+}
+
+class Margherita extends BasePizza{
+    public int cost(){
+        return 100;
+    }
+}
+
+abstract class ToppingDecorator extends BasePizza{
+    
+}
+
+class ExtraCheese extends ToppingDecorator{
+    BasePizza basepizza;
+    public ExtraCheese(BasePizza bp){
+        this.basepizza = bp;
+    }
+    public int cost(){
+        return basepizza.cost() + 40;
+    }
+}
+
+class Mushroom extends ToppingDecorator{
+    BasePizza basepizza;
+    public Mushroom(BasePizza bp){
+        this.basepizza = bp;
+    }
+    public int cost(){
+        return basepizza.cost() + 60;
+    }
+}
+
+class Jalapeno extends ToppingDecorator{
+    BasePizza basepizza;
+    public Jalapeno(BasePizza bp){
+        this.basepizza = bp;
+    }
+    public int cost(){
+        return basepizza.cost() + 30;
+    }
+}
+```
+
+Structure:  
+![image](https://github.com/user-attachments/assets/2df867a4-c31e-41a0-aa4d-89388e024300)
+![image](https://github.com/user-attachments/assets/a5c7918c-2887-41d2-b43d-44eb50d4be5c)
+![image](https://github.com/user-attachments/assets/7e049e91-5a29-47e8-8e9b-a8b247d63b12)
+
+# 5. Factory Pattern vs Abstract Factory Pattern
+We use Factory Pattern whenever we want to create an object on the basis of some condition.  
+Lets say we have an Interface called Shape and it has a method called draw(). 
+- Circle, Square, and Rectangle "is-a" Shape.
+- Lets say we will find the need to create these objects called Circle, Square and Rectangle. We will create them using Shape Factory.
+![image](https://github.com/user-attachments/assets/af7bd5f1-1393-4c68-b740-03e62615339e)
+
+It is a "has-a" relationship between ShapeFactory and Shape. This means that ShapeFactory has an object of Shape. 
+
+![image](https://github.com/user-attachments/assets/bcc38e2d-8468-461d-841a-fbcc236152f4)
+
+## Understanding Factory Pattern with a Simple Analogy  
+Imagine you walk into a pizza shop and say: 
+"I want a Margherita Pizza"  
+You don't **go to the kitchen yourself** amd prepare the pizza right?  
+Instead, the **Pizza Shop (Factory)** takes your order and makes the correct pizza for you.  
+
+So similarly, here if we didn't have a factory, we would have to manually make each pizza. We would have to know the exact name of the Margherita Pizza class or however it is implemented, in order to create its object. Instead we can use the Factory approach:  
+
+Using the factory approach, we just need to know the factory's name. From that itself, we can just pass in "Margherita" as a string and the factory would return as the Margherita object.  
+
+## Real-World Example of Factory Pattern
+Factory Pattern is used in many places, such as:  
+- **JDBC (Java Database Connectivity)**
+```
+Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/myDB", "user", "password");
+```
+- ```DriverManager.getConnection()``` is a Factory Method that creates the correct database connection.
+- You don’t manually create ```MySQLConnection```, ```PostgreSQLConnection```, etc.
