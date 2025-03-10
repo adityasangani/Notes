@@ -147,3 +147,72 @@ int main() {
 }
 ```
 
+## Print Any One Subsequence Which Satisfies A Condition
+
+- Structure:  
+![image](https://github.com/user-attachments/assets/93937498-1e1a-43ac-b49f-d309fb5b17e4)
+
+- Code:
+![image](https://github.com/user-attachments/assets/7ab8bf04-04b3-4473-a6f2-3920fdf5a718)
+
+
+## Counting Subsequences Based on a Condition
+1. Using a variable passed by reference:
+```
+class Solution {
+  public:
+    int getPerfectSum(vector<int>& arr, int target, int ind, int& count){
+        if(ind>=arr.size()){
+            if(target==0){
+                count++;
+                return 0;
+            } else return 0;
+        }
+        target-= arr[ind];
+        getPerfectSum(arr, target, ind+1, count);
+        target+=arr[ind];
+        getPerfectSum(arr, target, ind+1, count);
+        return count;
+    }
+  
+    int perfectSum(vector<int>& arr, int target) {
+        // code here
+        int count = 0;
+        getPerfectSum(arr, target, 0, count);
+        return count;
+        
+    }
+};
+```
+
+2. By returning 1 or 0
+
+- Structure:  
+![image](https://github.com/user-attachments/assets/36d5f3cf-2b33-4d6f-9cce-af11a0cde4ae)
+For n recursion calls:  
+![image](https://github.com/user-attachments/assets/9af1290c-0cee-4b11-bcc8-620fc18fb1e2)
+
+- Code:
+```
+class Solution {
+  public:
+    int getPerfectSum(vector<int>& arr, int target, int ind){
+        if(ind>=arr.size()){
+            if(target==0){
+                return 1;
+            } else return 0;
+        }
+        target-= arr[ind];
+        int left = getPerfectSum(arr, target, ind+1);
+        target+=arr[ind];
+        int right = getPerfectSum(arr, target, ind+1);
+        return left + right;
+    }
+  
+    int perfectSum(vector<int>& arr, int target) {
+        // code here
+        return getPerfectSum(arr, target, 0);
+        
+    }
+};
+```
