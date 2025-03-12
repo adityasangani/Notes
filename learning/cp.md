@@ -216,3 +216,37 @@ class Solution {
     }
 };
 ```
+
+# Bit Operations
+## Bit Properties
+Some properties of bitwise operations
+```
+a|b = a⊕b + a&b
+a⊕(a&b) = (a|b)⊕b
+b⊕(a&b) = (a|b)⊕a
+(a&b)⊕(a|b) = a⊕b
+```
+
+Addition:
+```
+a+b = a|b + a&b
+a+b = a⊕b + 2(a&b)
+```
+
+Subtraction:
+```
+a-b = (a⊕(a&b))-((a|b)⊕a)
+a-b = ((a|b)⊕b)-((a|b)⊕a)
+a-b = (a⊕(a&b))-(b⊕(a&b))
+a-b = ((a|b)⊕b)-(b⊕(a&b))
+```
+
+### Number of Digits of a Number
+It is given by ```floor(log2(X)) + 1```  
+Proof:  
+Lets say there is a number X = b0*2^0 + b1*2^1 + ... + bk*2^k.  
+We can say that X >= 2^k and X<2^(k+1).  
+So, 2^k <= X < 2^(k+1)  
+Taking log2 on both sides, we will get our answer. 
+floor(log2(X)) = k  
+And the number of digits in X is k+1 (because 2^0 se le kar 2^k tak jaa raha hai). Hence floor(log2(X)) + 1.  
